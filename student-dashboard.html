@@ -4,8 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Student Dashboard | Dee-Perfect Class International Secondary School</title>
-    <link rel="icon" type="image/png" href="./img/logo.png" />
+    <title>
+      Student Dashboard | Dee-Perfect Class International Secondary School
+    </title>
+    <link rel="icon" type="image/png" href="./img/favicon.jpg" />
     <!-- Google Fonts & Material Symbols -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
@@ -179,7 +181,7 @@
         <img
           alt="Dee-Perfect Class International Secondary School logo"
           class="h-9 w-9 object-contain"
-          src="img/logo.png"
+          src="img/favicon.jpg"
         />
         <h1
           class="font-headline-md text-headline-md font-bold text-primary tracking-tight"
@@ -331,7 +333,7 @@
             <img
               alt="Dee-Perfect Class International Secondary School crest"
               class="w-full h-full object-contain bg-white p-2"
-              src="img/logo.png"
+              src="img/favicon.jpg"
             />
           </div>
         </div>
@@ -351,7 +353,9 @@
             >
           </div>
           <div>
-            <p id="stat-exams-count" class="font-display-lg text-display-lg">0</p>
+            <p id="stat-exams-count" class="font-display-lg text-display-lg">
+              0
+            </p>
             <p class="font-label-md text-label-md text-primary-fixed-dim">
               Exams Taken
             </p>
@@ -369,10 +373,18 @@
                 >trending_up</span
               >
             </div>
-            <span id="stat-trend" class="text-on-tertiary-container font-label-sm"></span>
+            <span
+              id="stat-trend"
+              class="text-on-tertiary-container font-label-sm"
+            ></span>
           </div>
           <div class="mt-4">
-            <p id="stat-avg-score" class="font-display-lg text-display-lg text-on-surface">--</p>
+            <p
+              id="stat-avg-score"
+              class="font-display-lg text-display-lg text-on-surface"
+            >
+              --
+            </p>
             <p class="font-label-md text-label-md text-on-surface-variant">
               Average Score
             </p>
@@ -480,9 +492,15 @@
                   </th>
                 </tr>
               </thead>
-              <tbody id="recent-results-tbody" class="divide-y divide-outline-variant">
+              <tbody
+                id="recent-results-tbody"
+                class="divide-y divide-outline-variant"
+              >
                 <tr>
-                  <td colspan="4" class="px-md py-8 text-center text-on-surface-variant">
+                  <td
+                    colspan="4"
+                    class="px-md py-8 text-center text-on-surface-variant"
+                  >
                     No exams taken yet
                   </td>
                 </tr>
@@ -562,7 +580,10 @@
       id="ai-tutor-fab"
     >
       <a href="/ai-academic">
-        <img alt="AI Tutor" class="w-10 h-10 object-contain" src="img/Ai.png"
+        <img
+          alt="AI Tutor"
+          class="w-10 h-10 object-contain"
+          src="img/favicon.jpg"
       /></a>
       <div
         class="absolute -top-1 -right-1 w-5 h-5 bg-tertiary-fixed-dim rounded-full border-2 border-white flex items-center justify-center"
@@ -638,7 +659,13 @@
           String(str ?? "").replace(
             /[&<>"']/g,
             (c) =>
-              ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              })[c],
           );
 
         const percentOf = (r) =>
@@ -850,7 +877,5 @@
         waitForSupabase();
       });
     </script>
-
-    
   </body>
 </html>

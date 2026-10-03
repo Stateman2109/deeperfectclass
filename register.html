@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta name="theme-color" content="#14185f" />
-    <link rel="icon" type="image/png" href="./img/logo.png" />
+    <link rel="icon" type="image/png" href="./img/favicon.jpg" />
     <title>Dee-Perfect Class International Secondary School | CBT Portal</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
@@ -183,7 +183,7 @@
           <img
             alt="Dee-Perfect Class International Secondary School logo"
             class="w-24 h-24 mb-6 drop-shadow-sm object-contain"
-            src="img/logo.png"
+            src="img/favicon.jpg"
           />
           <h1
             class="font-display-lg text-display-lg text-primary tracking-tight"
@@ -363,16 +363,16 @@
                   <div class="space-y-1">
                     <label
                       class="font-label-md text-label-md text-on-surface-variant block"
-                      for="signup-school-type"
-                      >School Type</label
+                      for="signup-student-section"
+                      >Section</label
                     >
                     <select
-                      id="signup-school-type"
-                      name="schoolType"
+                      id="signup-student-section"
+                      name="studentSection"
                       class="w-full px-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md input-focus outline-none transition-all"
                       required
                     >
-                      <option value="">Select type</option>
+                      <option value="">Select section</option>
                       <option value="senior">Senior</option>
                       <option value="junior">Junior</option>
                     </select>
@@ -517,12 +517,12 @@
         }
       }
 
-      // Show only the classes that match the chosen school type:
+      // Show only the classes that match the chosen section:
       // Junior -> JSS 1-3, Senior -> SS 1-3.
       (function () {
-        const typeSelect = document.getElementById("signup-school-type");
+        const sectionSelect = document.getElementById("signup-student-section");
         const classSelect = document.getElementById("signup-class");
-        if (!typeSelect || !classSelect) return;
+        if (!sectionSelect || !classSelect) return;
 
         const classes = {
           junior: ["JSS 1", "JSS 2", "JSS 3"],
@@ -544,8 +544,8 @@
           });
         }
 
-        typeSelect.addEventListener("change", function () {
-          fill(classes[typeSelect.value] || allClasses);
+        sectionSelect.addEventListener("change", function () {
+          fill(classes[sectionSelect.value] || allClasses);
         });
       })();
     </script>

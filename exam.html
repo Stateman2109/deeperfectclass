@@ -2,9 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Examination | Dee-Perfect Class International Secondary School</title>
+    <title>
+      Examination | Dee-Perfect Class International Secondary School
+    </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="./img/logo.png" />
+    <link rel="icon" type="image/png" href="./img/favicon.jpg" />
 
     <script src="./scripts/supabase.min.js"></script>
     <script src="./scripts/schools.js"></script>
@@ -550,9 +552,7 @@
           y += 18;
         });
 
-        doc.save(
-          "Dee-Perfect Class Exam Result.pdf",
-        );
+        doc.save("Dee-Perfect Class Exam Result.pdf");
       }
 
       function renderNavGrid() {
@@ -688,7 +688,9 @@
 
         // count how many questions the student really answered
         const answeredCount = allQuestions.filter((q, i) =>
-          ["A", "B", "C", "D"].includes(String(userAnswers[i] || "").toUpperCase()),
+          ["A", "B", "C", "D"].includes(
+            String(userAnswers[i] || "").toUpperCase(),
+          ),
         ).length;
 
         // student did not attempt this subject -> do NOT save a 0 result
@@ -765,7 +767,9 @@
               user_id: userId,
               exam_name: examName,
               subject: examDataGlobal?.subject || null,
-              exam_year: examDataGlobal?.year ? Number(examDataGlobal.year) : null,
+              exam_year: examDataGlobal?.year
+                ? Number(examDataGlobal.year)
+                : null,
               score,
               total: allQuestions.length,
               status,

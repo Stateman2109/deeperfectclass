@@ -370,7 +370,7 @@ async function signUpUser(fullName, email, password, extra = {}) {
     throw new Error("Name, email, and password are required.");
   }
 
-  // extra = { school_id, school_name, class_level, school_type }
+  // extra = { school_id, school_name, class_level, student_section, lga }
   // These travel as auth metadata; the handle_new_user() trigger copies them
   // into the profiles table, so they are saved even before email confirmation.
   if (supabaseClient) {
@@ -593,7 +593,9 @@ function attachAuthHandlers() {
         "signup-confirm-password",
       )?.value;
       const classLevel = document.getElementById("signup-class")?.value;
-      const schoolType = document.getElementById("signup-school-type")?.value;
+      const studentSection = document.getElementById(
+        "signup-student-section",
+      )?.value;
       const lgaField =
         signupForm.elements.namedItem("lga") ||
         document.getElementById("signup-lga");
@@ -603,7 +605,7 @@ function attachAuthHandlers() {
         showNotification("Please complete all signup fields.", "error");
         return;
       }
-      if (schoolType !== "senior" && schoolType !== "junior") {
+      if (studentSection !== "senior" && studentSection !== "junior") {
         showNotification("Please select Senior or Junior.", "error");
         return;
       }
@@ -613,9 +615,9 @@ function attachAuthHandlers() {
       }
       // JSS classes belong to Junior, SS classes to Senior
       const classIsJunior = /^JSS/i.test(classLevel);
-      if ((schoolType === "junior") !== classIsJunior) {
+      if ((studentSection === "junior") !== classIsJunior) {
         showNotification(
-          `${classLevel} does not belong to the ${schoolType} section.`,
+          `${classLevel} does not belong to the ${studentSection} section.`,
           "error",
         );
         return;
@@ -644,7 +646,7 @@ function attachAuthHandlers() {
           school_id: portal.id,
           school_name: portal.school_name,
           class_level: classLevel,
-          school_type: schoolType,
+          student_section: studentSection,
           lga,
         });
         showNotification(

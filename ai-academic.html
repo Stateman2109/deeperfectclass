@@ -1,0 +1,632 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AI Tutor - Dee-Perfect Class International Secondary School</title>
+    <link rel="icon" type="image/png" href="./img/favicon.jpg" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- <link rel="stylesheet" href="./css/output.css" /> -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#e3e4ee",
+              "on-tertiary-container": "#00243a",
+              "on-tertiary-fixed-variant": "#004a70",
+              "surface-bright": "#f8f9ff",
+              "on-secondary-fixed": "#001e2f",
+              "secondary-container": "#c7ebff",
+              tertiary: "#0b7bb5",
+              surface: "#f8f9ff",
+              "secondary-fixed": "#c7ebff",
+              "primary-fixed": "#c9ccff",
+              "on-error": "#ffffff",
+              "on-surface": "#191b24",
+              "inverse-primary": "#9fa5ff",
+              "surface-dim": "#d9dae6",
+              "tertiary-fixed": "#8fdcff",
+              "on-tertiary-fixed": "#001d2e",
+              secondary: "#0f8fd6",
+              primary: "#14185f",
+              "on-primary-container": "#dfe3ff",
+              "primary-fixed-dim": "#9fa5ff",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#7fcdf5",
+              "error-container": "#ffdad6",
+              "on-secondary-container": "#004a6e",
+              "inverse-on-surface": "#f0f0fa",
+              "on-surface-variant": "#444659",
+              "surface-container": "#ecedf7",
+              "primary-container": "#2d3394",
+              outline: "#757689",
+              error: "#ba1a1a",
+              "surface-tint": "#3a40b0",
+              "on-tertiary": "#ffffff",
+              "tertiary-container": "#35b6f2",
+              "on-background": "#191b24",
+              "on-secondary": "#ffffff",
+              "on-primary": "#ffffff",
+              "outline-variant": "#c5c6dc",
+              "on-primary-fixed-variant": "#2a2f8f",
+              "tertiary-fixed-dim": "#5cc8f7",
+              background: "#f8f9ff",
+              "inverse-surface": "#2e303a",
+              "surface-variant": "#e3e4ee",
+              "on-secondary-fixed-variant": "#004a6e",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed": "#00023f",
+              "surface-container-high": "#e6e7f1",
+              "surface-container-low": "#f1f2fb",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              md: "24px",
+              lg: "40px",
+              gutter: "24px",
+              "container-max": "1280px",
+              xs: "4px",
+              xl: "64px",
+              base: "8px",
+              sm: "12px",
+            },
+            fontFamily: {
+              "label-sm": ["Inter"],
+              "body-md": ["Inter"],
+              "body-lg": ["Inter"],
+              "label-md": ["Inter"],
+              "display-lg": ["Inter"],
+              "headline-sm": ["Inter"],
+              "headline-md": ["Inter"],
+            },
+            fontSize: {
+              "label-sm": ["12px", { lineHeight: "16px", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "20px",
+                  letterSpacing: "0.01em",
+                  fontWeight: "500",
+                },
+              ],
+              "display-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-sm": [
+                "20px",
+                { lineHeight: "28px", fontWeight: "600" },
+              ],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .chat-bubble-ai {
+        border-bottom-left-radius: 0 !important;
+      }
+      .chat-bubble-user {
+        border-bottom-right-radius: 0 !important;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      body {
+        background-color: #f8f9ff;
+        font-family: "Inter", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="text-on-surface">
+    <!-- Top Navigation Anchor (As defined in JSON) -->
+    <header
+      class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-white dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none"
+    >
+      <div class="flex items-center gap-3 cursor-pointer active:opacity-80">
+        <img
+          alt="Dee-Perfect Class International Secondary School logo"
+          class="h-9 w-9 md:h-10 md:w-10 object-contain"
+          src="img/favicon.jpg"
+        />
+        <h1
+          class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight"
+        >
+          DEE-PERFECT CLASS
+          <span class="hidden sm:inline text-secondary"
+            >INTERNATIONAL SECONDARY SCHOOL</span
+          >
+        </h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="hidden md:flex gap-6 items-center mr-8">
+          <a
+            class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors px-3 py-2 rounded-lg"
+            href="/student-dashboard"
+            >Dashboard</a
+          >
+          <a
+            class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors px-3 py-2 rounded-lg"
+            href="/exam-setup"
+            >Exams</a
+          >
+          <a
+            class="font-label-md text-label-md text-primary dark:text-inverse-primary font-bold px-3 py-2 rounded-lg bg-surface-container"
+            href="/ai-academic"
+            >AI Tutor</a
+          >
+        </div>
+        <!-- <div
+          class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border border-outline-variant"
+        >
+          <img
+            class="w-full h-full object-cover"
+            data-alt="A professional student profile portrait, clean background, high-stakes academic setting, soft studio lighting, focused expression, wearing a formal navy sweater, modern corporate aesthetic."
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIu3C80T6Vim_Xs2UYARt9zFjIgQ9_R3MN_ePxWDTTY-iOA9URB-Bh2x7AXvooOr8hyVuqwNqhNhUALnuABbTMiWQJc8dAetl-dAqK80fOj8FFgLn-6z1Wvfh4x0XaVUxcP4bWCVRcEohha0lA1MBAKPe6WR8D1Rk3K-PxlDALE3DQA3_ltQooGyRysJ_HSwvY9qZdmpmmNBDUFUvF2o-MYduf0NDXOLvFEuTjPcVc4oG2VcTmy9ho7vaU66H1JMc1jS_vhH7NcJs"
+          />
+        </div> -->
+      </div>
+    </header>
+    <!-- Navigation Drawer (Desktop Anchor) -->
+    <aside
+      class="hidden lg:flex flex-col h-screen py-md w-72 fixed left-0 top-16 bg-surface border-r border-outline-variant dark:border-outline"
+    >
+      <div class="px-6 mb-8 mt-2">
+        <div
+          class="flex items-center gap-3 p-4 bg-surface-container-low rounded-xl"
+        >
+          <!-- <div class="w-12 h-12 rounded-full overflow-hidden">
+            <img
+              class="w-full h-full object-cover"
+              data-alt="Close up of a student user profile avatar, minimalist academic background, soft natural lighting, professional and approachable look."
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLux_BtIrWg81N914FoszhbdCEWpJWX5QCXPv6CToPflNvhYAg6MNIXV8ElZxQsYS6ZcxicHZcne7VSSI3jmb400Zo_Wmc5thv6FUGJsQioDGcySfOiNBsUi8wvEPcWVJE7Js0Clee97PkVBjnUJEZvnHgwieEGcPYVlG41LoXdUfvsXGH_K9EJVSzQnws6mbXsTgkqwJpxwrMXvLm_TKvMo_9TxUHDx40PREH1AAmdB12JX2q3VqgpaB0GE_wk9wwrZwxUJhzdXc"
+            />
+          </div> -->
+          <div>
+            <p class="font-label-md text-label-md font-bold text-primary">
+              Exam Candidate
+            </p>
+            <p class="font-body-md text-sm text-on-surface-variant">
+              Student Account
+            </p>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 space-y-2">
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all active:scale-95 duration-75 ease-in-out"
+          href="/student-dashboard"
+        >
+          <span class="material-symbols-outlined">dashboard</span>
+          <span class="font-label-md text-label-md">Dashboard</span>
+        </a>
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all active:scale-95 duration-75 ease-in-out"
+          href="/exam-setup"
+        >
+          <span class="material-symbols-outlined">quiz</span>
+          <span class="font-label-md text-label-md">Exams</span>
+        </a>
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all active:scale-95 duration-75 ease-in-out"
+          href="/exam-result"
+        >
+          <span class="material-symbols-outlined">analytics</span>
+          <span class="font-label-md text-label-md">Reports</span>
+        </a>
+        <a
+          class="bg-primary-container text-on-primary-container rounded-full mx-2 flex items-center gap-4 px-4 py-3 shadow-sm"
+          href="/ai-academic"
+        >
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >psychology</span
+          >
+          <span class="font-label-md text-label-md font-bold">AI Tutor</span>
+        </a>
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all active:scale-95 duration-75 ease-in-out"
+          href="/"
+        >
+          <span class="material-symbols-outlined">settings</span>
+          <span class="font-label-md text-label-md">Settings</span>
+        </a>
+      </nav>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="pt-16 pb-20 lg:pb-0 lg:ml-72 min-h-screen flex flex-col">
+      <div
+        class="flex-1 max-w-container-max mx-auto w-full p-4 md:p-md flex flex-col lg:flex-row gap-gutter"
+      >
+        <!-- Chat Window Container -->
+        <div
+          class="flex-1 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden flex flex-col h-[calc(100vh-140px)] lg:h-[calc(100vh-128px)]"
+        >
+          <!-- Chat Header -->
+          <div
+            class="px-6 py-4 border-b border-outline-variant flex items-center justify-between bg-white"
+          >
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center p-2"
+              >
+                <img
+                  class="w-full h-full object-contain"
+                  src="img/favicon.jpg"
+                />
+              </div>
+              <div>
+                <h2 class="font-headline-sm text-headline-sm text-primary">
+                  AI Learning Assistant
+                </h2>
+                <div class="flex items-center gap-2">
+                  <span
+                    class="w-2 h-2 bg-on-tertiary-container rounded-full animate-pulse"
+                  ></span>
+                  <span
+                    class="font-label-md text-label-sm text-on-surface-variant"
+                    >Online &amp; Ready to Help</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button
+                class="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors"
+              >
+                <span class="material-symbols-outlined">history</span>
+              </button>
+              <button
+                class="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors"
+              >
+                <span class="material-symbols-outlined">more_vert</span>
+              </button>
+            </div>
+          </div>
+          <!-- Chat History -->
+          <div
+            id="chat-history"
+            class="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide"
+          >
+            <!-- Date Separator -->
+            <div class="flex justify-center">
+              <span
+                class="px-4 py-1 bg-surface-container text-on-surface-variant rounded-full text-xs font-label-md"
+                >TODAY</span
+              >
+            </div>
+            <!-- AI Message -->
+            <div class="flex gap-4 max-w-3xl">
+              <div
+                class="w-8 h-8 rounded-full bg-primary-container flex-shrink-0 flex items-center justify-center p-1"
+              >
+                <img
+                  class="w-full h-full object-contain"
+                  src="img/favicon.jpg"
+                />
+              </div>
+              <div class="space-y-2">
+                <div
+                  class="bg-surface-container-low text-on-surface p-4 rounded-xl chat-bubble-ai border border-outline-variant"
+                >
+                  <p class="font-body-md text-body-md leading-relaxed">
+                    Hello! I see you're preparing for your Math examination. Is
+                    there a specific topic you'd like to dive into today?
+                  </p>
+                </div>
+                <span class="text-xs text-on-surface-variant px-1"
+                  >09:15 AM</span
+                >
+              </div>
+            </div>
+            <!-- User Message -->
+            <div class="flex gap-4 max-w-3xl ml-auto flex-row-reverse">
+              <!-- <div
+                class="w-8 h-8 rounded-full bg-secondary-container flex-shrink-0 flex items-center justify-center overflow-hidden border border-outline-variant"
+              >
+                <img
+                  class="w-full h-full object-cover"
+                  data-alt="Student avatar placeholder, minimalist icon, neutral academic styling."
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWnnRaXobwRzMbBcG_hZcIAGnTgfGUCpJc7pHc0nkazwBftJHQxXOAlw8ygQbc9xHBjIjcmUirLCb-BVPT6hfheRN4Xs-CrsTJTR6LBHI1pw4-aPZG0RZlgS3_J632Bi_qx6zD3QNhbNTaJkVYxkF8_fEWwzy5tILLt6Yq9NwSOpxH8rkrK1OfISdD1NnJELmb--0uDvcvtbzb4Oy3QZZ0vIrHexi5uWziNxyBvPa3NR2jn36ppsu0OYvs9zkT9YE8JN0gYfI3LkY"
+                />
+              </div> -->
+              <div class="space-y-2 flex flex-col items-end">
+                <div
+                  class="bg-primary text-on-primary p-4 rounded-xl chat-bubble-user"
+                >
+                  <p class="font-body-md text-body-md leading-relaxed">
+                    Yes, I'm struggling with Quadratic Equations. Can you
+                    explain the quadratic formula and when to use it?
+                  </p>
+                </div>
+                <span class="text-xs text-on-surface-variant px-1"
+                  >09:16 AM</span
+                >
+              </div>
+            </div>
+            <!-- AI Deep Dive Message -->
+            <div class="flex gap-4 max-w-3xl">
+              <div
+                class="w-8 h-8 rounded-full bg-primary-container flex-shrink-0 flex items-center justify-center p-1"
+              >
+                <img
+                  class="w-full h-full object-contain"
+                  src="img/favicon.jpg"
+                />
+              </div>
+              <div class="space-y-4">
+                <div
+                  class="bg-surface-container-low text-on-surface p-5 rounded-xl chat-bubble-ai border border-outline-variant shadow-sm"
+                >
+                  <p
+                    class="font-body-md text-body-md mb-4 font-bold text-primary"
+                  >
+                    Mastering the Quadratic Formula
+                  </p>
+                  <p class="font-body-md text-body-md mb-4 leading-relaxed">
+                    Great choice! Quadratic equations take the form
+                    <span class="font-mono bg-white px-1 rounded"
+                      >ax² + bx + c = 0</span
+                    >. The Quadratic Formula is your "universal tool" for
+                    finding the roots (x-values) when factoring is too
+                    difficult.
+                  </p>
+                  <div
+                    class="bg-white border-2 border-primary-container rounded-lg p-6 mb-4 text-center"
+                  >
+                    <div class="font-serif text-3xl text-primary-container">
+                      x =
+                      <span class="inline-block align-middle text-left"
+                        ><span class="block border-b-2 border-primary-container"
+                          >-b ± √(b² - 4ac)</span
+                        ><span class="block pt-1 text-center">2a</span></span
+                      >
+                    </div>
+                  </div>
+                  <p
+                    class="font-body-md text-body-md mb-3 font-semibold text-on-tertiary-container"
+                  >
+                    Key Insights:
+                  </p>
+                  <ul
+                    class="list-disc ml-5 space-y-2 font-body-md text-on-surface-variant"
+                  >
+                    <li>
+                      <strong class="text-on-surface"
+                        >Discriminant (b² - 4ac):</strong
+                      >
+                      Tells you how many solutions exist.
+                    </li>
+                    <li>If positive: 2 real solutions.</li>
+                    <li>If zero: 1 real solution.</li>
+                    <li>If negative: No real solutions (complex).</li>
+                  </ul>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    class="px-4 py-2 border border-outline-variant rounded-full text-label-md text-primary hover:bg-primary-container hover:text-on-primary-container transition-all cursor-pointer"
+                  >
+                    Show Example
+                  </button>
+                  <button
+                    class="px-4 py-2 border border-outline-variant rounded-full text-label-md text-primary hover:bg-primary-container hover:text-on-primary-container transition-all cursor-pointer"
+                  >
+                    Practice Quiz
+                  </button>
+                </div>
+                <span class="text-xs text-on-surface-variant px-1"
+                  >09:17 AM</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Input Area -->
+          <div class="p-6 bg-white border-t border-outline-variant">
+            <form
+              id="ai-chat-form"
+              class="relative flex items-end gap-3 bg-surface-container-low rounded-xl p-3 border border-outline focus-within:border-primary transition-all"
+            >
+              <button
+                type="button"
+                class="p-2 text-on-surface-variant hover:text-primary transition-colors"
+              >
+                <span class="material-symbols-outlined">attach_file</span>
+              </button>
+              <textarea
+                id="ai-chat-input"
+                class="flex-1 bg-transparent border-none focus:ring-0 resize-none font-body-md text-body-md py-2 px-1 scrollbar-hide"
+                placeholder="Ask a question..."
+                rows="1"
+                style="min-height: 40px"
+              ></textarea>
+              <button
+                id="ai-chat-send"
+                type="submit"
+                class="w-12 h-12 bg-on-tertiary-container text-white rounded-lg flex items-center justify-center hover:shadow-md active:scale-95 transition-all"
+              >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >send</span
+                >
+              </button>
+            </form>
+            <div class="mt-3 flex justify-center">
+              <p
+                class="text-[10px] text-on-surface-variant uppercase tracking-widest font-label-md"
+              >
+                Dee-Perfect Class AI can make mistakes. Verify important info.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Sidebar Context -->
+        <aside class="hidden xl:block w-80 space-y-gutter">
+          <!-- Topics to Learn -->
+          <div
+            class="bg-white rounded-xl p-6 border border-outline-variant shadow-sm"
+          >
+            <h3
+              class="font-headline-sm text-headline-sm text-primary mb-4 flex items-center gap-2"
+            >
+              <span class="material-symbols-outlined text-on-tertiary-container"
+                >lightbulb</span
+              >
+              Suggested Topics
+            </h3>
+            <div class="space-y-3">
+              <div
+                class="p-3 bg-surface-container-low rounded-lg border-l-4 border-on-tertiary-container cursor-pointer hover:bg-surface-container transition-colors"
+              >
+                <p class="font-label-md text-label-md text-primary">
+                  Factorization Basics
+                </p>
+                <p class="text-xs text-on-surface-variant mt-1">
+                  Foundation for Quadratic Equations
+                </p>
+              </div>
+              <div
+                class="p-3 bg-surface-container-low rounded-lg border-l-4 border-primary cursor-pointer hover:bg-surface-container transition-colors"
+              >
+                <p class="font-label-md text-label-md text-primary">
+                  Graphing Parabolas
+                </p>
+                <p class="text-xs text-on-surface-variant mt-1">
+                  Visualizing solutions on a plane
+                </p>
+              </div>
+              <div
+                class="p-3 bg-surface-container-low rounded-lg border-l-4 border-outline-variant cursor-pointer hover:bg-surface-container transition-colors opacity-60"
+              >
+                <p class="font-label-md text-label-md text-primary">
+                  Completing the Square
+                </p>
+                <p class="text-xs text-on-surface-variant mt-1">
+                  Advanced derivation method
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- AI Tips Card -->
+          <div
+            class="bg-primary text-white rounded-xl p-6 shadow-md relative overflow-hidden"
+          >
+            <div class="absolute top-0 right-0 p-4 opacity-20">
+              <span class="material-symbols-outlined text-6xl">school</span>
+            </div>
+            <h4
+              class="font-label-md text-label-md font-bold text-tertiary-fixed mb-2"
+            >
+              PRO EXAM TIP
+            </h4>
+            <p class="font-body-md text-sm leading-relaxed">
+              Always check your discriminant first! If it's negative and the
+              question asks for real roots, you can save time by knowing no
+              solution exists.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+    <!-- Bottom Navigation (Mobile Only Anchor) -->
+    <nav
+      class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 bg-surface-container-lowest border-t border-outline-variant shadow-lg rounded-t-xl px-4"
+    >
+      <div
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-90 transition-transform cursor-pointer"
+      >
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-label-sm text-label-sm"><a href="/">Home</a></span>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-90 transition-transform cursor-pointer"
+      >
+        <span class="material-symbols-outlined">assignment</span>
+        <span class="font-label-sm text-label-sm"
+          ><a href="/exam-setup">Exam</a></span
+        >
+      </div>
+      <div
+        class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-6 py-1 active:scale-90 transition-transform cursor-pointer"
+      >
+        <span
+          class="material-symbols-outlined"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+          >smart_toy</span
+        >
+        <span class="font-label-sm text-label-sm">AI Chat</span>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-90 transition-transform cursor-pointer"
+      >
+        <!-- <span class="material-symbols-outlined">pejrson</span> -->
+        <span class="font-label-sm text-label-sm"
+          ><a href="index.html">Logout</a></span
+        >
+      </div>
+    </nav>
+    <script>
+      // Micro-interaction: Auto-resize textarea
+      const textarea = document.querySelector("textarea");
+      textarea.addEventListener("input", function () {
+        this.style.height = "auto";
+        this.style.height = this.scrollHeight + "px";
+        if (this.scrollHeight > 150) {
+          this.style.overflowY = "auto";
+        } else {
+          this.style.overflowY = "hidden";
+        }
+      });
+
+      // Toggle dark mode (for testing purposes, though Light Mode requested)
+      // document.documentElement.classList.add('dark');
+    </script>
+    <script src="./scripts/supabase.min.js"></script>
+    <script src="./scripts/site.js"></script>
+  </body>
+</html>
