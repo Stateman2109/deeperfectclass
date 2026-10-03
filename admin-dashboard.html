@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Dashboard | Dee-Perfect Class International Secondary School</title>
+<link rel="icon" type="image/png" href="img/logo.png" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* Palette from the school logo: navy #14185f, royal blue #2d3394, sky blue #1fa3e6 */
+  body{font-family:Inter,sans-serif;background:#f8f9ff;color:#191b24}
+  th.sortable{cursor:pointer;user-select:none;white-space:nowrap}
+  th.sortable:hover{background:#e3e4ee}
+  .bar{height:8px;border-radius:4px;background:#e3e4ee;overflow:hidden}
+  .bar>i{display:block;height:100%;background:#2d3394}
+  .bar.warn>i{background:#ba1a1a}
+  .bar.mid>i{background:#e0a100}
+</style>
+</head>
+<body>
+<header class="bg-[#14185f] text-white border-b-4 border-[#1fa3e6]">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" class="w-11 h-11 object-contain bg-white rounded-full p-0.5" alt="Dee-Perfect Class International Secondary School logo" />
+      <div>
+        <h1 class="text-lg font-bold leading-tight">DEE-PERFECT ADMIN DASHBOARD</h1>
+        <p class="text-xs text-[#dfe3ff]">Dee-Perfect Class International Secondary School, Ifon-Osun</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 text-sm">
+      <span id="who" class="hidden sm:inline text-[#dfe3ff]"></span>
+      <button id="logout" class="bg-white/15 hover:bg-white/25 px-3 py-1.5 rounded-lg">Logout</button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+  <div id="status" class="bg-white border rounded-xl p-6 text-center text-gray-600">Loading school data…</div>
+
+  <div id="app" class="hidden space-y-6">
+    <!-- KPI cards -->
+    <section class="grid grid-cols-2 lg:grid-cols-5 gap-4" id="kpis"></section>
+
+    <!-- Class drill-down -->
+    <section class="bg-white border rounded-xl">
+      <div class="p-4 border-b flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="font-semibold text-lg">Classes</h2>
+          <p class="text-sm text-gray-500">Click a class to see its students.</p>
+        </div>
+        <input id="class-search" placeholder="Search class…" class="border rounded-lg px-3 py-2 text-sm w-48" />
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm" id="class-table"></table>
+      </div>
+    </section>
+
+    <!-- Students of selected class -->
+    <section id="class-detail" class="hidden bg-white border rounded-xl">
+      <div class="p-4 border-b flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="font-semibold text-lg" id="detail-title"></h2>
+          <p class="text-sm text-gray-500" id="detail-sub"></p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <input id="f-search" placeholder="Search student…" class="border rounded-lg px-3 py-2 text-sm w-44" />
+          <button id="export" class="bg-[#14185f] text-white rounded-lg px-3 py-2 text-sm">Export CSV</button>
+          <button id="close-detail" class="border rounded-lg px-3 py-2 text-sm">Close</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm" id="student-table"></table>
+      </div>
+    </section>
+
+    <!-- Analytic views -->
+    <section class="grid lg:grid-cols-2 gap-6" id="panels"></section>
+  </div>
+</main>
+
+<script src="./scripts/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = "https://bjfhmvvupkapplnbrukz.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_RxNzh9HL5UPhazJDk6BL9w_aJtZLBAP";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const PASS_MARK = 50;          // matches exam.html (PASSED at >= 50%)
+const INTERVENTION_BELOW = 40; // class average under this %, with enough attempts
+const MIN_ATTEMPTS = 3;
+const CLASS_ORDER = ["JSS 1", "JSS 2", "JSS 3", "SS 1", "SS 2", "SS 3"];
+
+const $ = (id) => document.getElementById(id);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pct = (n) => (n == null || isNaN(n) ? "–" : Math.round(n) + "%");
+const avg = (a) => (a.length ? a.reduce((s, x) => s + x, 0) / a.length : null);
+const fmt = (n) => Number(n).toLocaleString();
+const classRank = (c) => { const i = CLASS_ORDER.indexOf(c); return i === -1 ? 99 : i; };
+
+let students = [], results = [], incidents = [];
+let PORTAL_ID = null;
+let studentRows = [];      // one row per student with performance
+let sel = { cls: null, sort: { key: "avg", dir: "desc" } };
+
+async function fetchAll(table, columns, filter) {
+  // Supabase returns max 1000 rows per request, so page through.
+  // `filter` lets the caller restrict the query on the server.
+  const out = [];
+  for (let from = 0; ; from += 1000) {
+    let q = db.from(table).select(columns);
+    if (filter) q = filter(q);
+    const { data, error } = await q.range(from, from + 999);
+    if (error) throw error;
+    out.push(...data);
+    if (data.length < 1000) break;
+  }
+  return out;
+}
+
+// Fetch rows that belong to the given students only (in small batches).
+async function fetchForUsers(table, columns, userIds) {
+  const out = [];
+  for (let i = 0; i < userIds.length; i += 150) {
+    const chunk = userIds.slice(i, i + 150);
+    out.push(...(await fetchAll(table, columns, (q) => q.in("user_id", chunk))));
+  }
+  return out;
+}
+
+async function init() {
+  const { data: { user } } = await db.auth.getUser();
+  if (!user) return (location.href = "register.html");
+  const { data: me } = await db.from("profiles").select("role,full_name,school_id").eq("id", user.id).maybeSingle();
+  if (!me || !["government", "admin"].includes(me.role)) {
+    $("status").innerHTML = "<b>Access denied.</b> This page is only for school administrator accounts.";
+    return;
+  }
+  if (!me.school_id) {
+    $("status").innerHTML = "<b>This account is not linked to a school portal.</b> Ask the system administrator to set its school_id.";
+    return;
+  }
+  // The account must belong to the portal (website address) it is logged in on
+  const { data: portal } = await db.from("schools").select("id,school_name,domain").eq("id", me.school_id).maybeSingle();
+  const host = location.hostname.replace(/^www\./, "");
+  if (portal && portal.domain !== host && !["localhost", "127.0.0.1"].includes(host)) {
+    $("status").innerHTML = "<b>Access denied.</b> This account belongs to a different portal.";
+    return;
+  }
+  if (portal) document.title = "Admin Dashboard | " + portal.school_name;
+  $("who").textContent = (me.full_name || user.email) + (portal ? " · " + portal.school_name : "");
+  PORTAL_ID = me.school_id;
+  try {
+    // Only the students who registered through THIS website (same school_id) are
+    // requested from the database, and only their results are fetched.
+    students = await fetchAll("profiles", "id,full_name,class_level,school_type,role,school_id",
+      (q) => q.eq("school_id", PORTAL_ID).eq("role", "student"));
+    const studentIds = students.map((p) => p.id);
+    results = await fetchForUsers("results", "user_id,score,total,subject,exam_year,created_at,exam_name", studentIds);
+    try { incidents = await fetchForUsers("exam_incidents", "id,kind,user_id,created_at", studentIds); } catch { incidents = []; }
+    // same rule as the student pages: ignore empty 0-score rows (and double-check ownership)
+    const ids = new Set(students.map((s) => s.id));
+    results = results.filter((r) => ids.has(r.user_id) && Number(r.score) > 0).map((r) => ({ ...r, p: Number(r.total) > 0 ? (r.score / r.total) * 100 : Number(r.score) }));
+    build();
+    $("status").classList.add("hidden");
+    $("app").classList.remove("hidden");
+  } catch (e) {
+    console.error(e);
+    $("status").innerHTML = "Could not load data: " + esc(e.message);
+  }
+}
+
+function subjectOf(r) {
+  if (r.subject) return r.subject;
+  return (r.exam_name || "Unknown").replace(/\b(19|20)\d{2}\b.*$/, "").trim() || "Unknown";
+}
+
+// Senior / Junior: the school type chosen at registration. If it is missing
+// (older accounts) it is worked out from the class: JSS = Junior, SS = Senior.
+function sectionOf(s) {
+  const t = String(s.school_type || "").toLowerCase();
+  if (t === "senior") return "Senior";
+  if (t === "junior") return "Junior";
+  const c = String(s.class_level || "").toUpperCase();
+  if (c.startsWith("JSS")) return "Junior";
+  if (c.startsWith("SS")) return "Senior";
+  return "Not set";
+}
+
+function build() {
+  const byUser = {};
+  results.forEach((r) => (byUser[r.user_id] ||= []).push(r));
+  studentRows = students.map((s) => {
+    const rs = byUser[s.id] || [];
+    return { ...s, class_level: s.class_level || "Not set", section: sectionOf(s),
+             exams: rs.length, avg: avg(rs.map((r) => r.p)) };
+  });
+  const userMap = Object.fromEntries(studentRows.map((s) => [s.id, s]));
+  results.forEach((r) => (r.s = userMap[r.user_id]));
+
+  const subjects = new Set(results.map(subjectOf));
+  const participated = studentRows.filter((s) => s.exams > 0).length;
+  const seniors = studentRows.filter((s) => s.section === "Senior").length;
+  const juniors = studentRows.filter((s) => s.section === "Junior").length;
+
+  $("kpis").innerHTML = [
+    ["Students Registered", fmt(studentRows.length)],
+    ["Senior / Junior Students", fmt(seniors) + " / " + fmt(juniors)],
+    ["Examinations Conducted", fmt(results.length)],
+    ["Subjects Assessed", fmt(subjects.size)],
+    ["Participation Rate", studentRows.length ? pct((participated / studentRows.length) * 100) : "–"],
+  ].map(([l, v]) => `<div class="bg-white border rounded-xl p-4"><p class="text-xs uppercase tracking-wide text-gray-500">${l}</p><p class="text-2xl font-bold text-[#14185f] mt-1">${v}</p></div>`).join("");
+
+  renderClassTable();
+  renderPanels();
+}
+
+function group(rows, keyFn) {
+  const m = {};
+  rows.forEach((r) => (m[keyFn(r)] ||= []).push(r));
+  return m;
+}
+
+function classStats() {
+  const g = group(studentRows, (s) => s.class_level);
+  return Object.entries(g).map(([cls, ss]) => {
+    const withExams = ss.filter((s) => s.exams > 0);
+    return { cls, section: ss[0].section, students: ss.length,
+             exams: ss.reduce((n, s) => n + s.exams, 0), avg: avg(withExams.map((s) => s.avg)),
+             part: ss.length ? (withExams.length / ss.length) * 100 : 0 };
+  }).sort((a, b) => classRank(a.cls) - classRank(b.cls) || a.cls.localeCompare(b.cls));
+}
+
+function renderClassTable() {
+  const q = $("class-search").value.toLowerCase();
+  const rows = classStats().filter((r) => r.cls.toLowerCase().includes(q) || r.section.toLowerCase().includes(q));
+  $("class-table").innerHTML = `<thead class="bg-gray-50 text-left text-gray-600"><tr>
+    <th class="p-3">Class</th><th class="p-3">Section</th><th class="p-3">Students</th><th class="p-3">Exams</th><th class="p-3">Avg score</th><th class="p-3">Participation</th></tr></thead>
+    <tbody>${rows.map((r) => `<tr class="border-t hover:bg-[#f1f2fb] cursor-pointer" data-cls="${esc(r.cls)}">
+      <td class="p-3 font-medium text-[#14185f]">${esc(r.cls)}</td><td class="p-3">${esc(r.section)}</td><td class="p-3">${fmt(r.students)}</td>
+      <td class="p-3">${fmt(r.exams)}</td><td class="p-3">${pct(r.avg)}</td><td class="p-3">${pct(r.part)}</td></tr>`).join("") || `<tr><td class="p-4 text-gray-500" colspan="6">No data yet.</td></tr>`}</tbody>`;
+  document.querySelectorAll("#class-table tr[data-cls]").forEach((tr) => (tr.onclick = () => openClass(tr.dataset.cls)));
+}
+
+function openClass(cls) {
+  sel.cls = cls;
+  $("f-search").value = "";
+  $("detail-title").textContent = cls + " Students";
+  $("class-detail").classList.remove("hidden");
+  renderStudents();
+  $("class-detail").scrollIntoView({ behavior: "smooth" });
+}
+
+const COLS = [
+  ["full_name", "Student"], ["class_level", "Class"], ["section", "Section"], ["exams", "Exams taken"], ["avg", "Performance"],
+];
+
+function visibleStudents() {
+  const q = $("f-search").value.toLowerCase();
+  const { key, dir } = sel.sort;
+  const rows = studentRows.filter((s) => s.class_level === sel.cls && (!q || (s.full_name || "").toLowerCase().includes(q)));
+  rows.sort((a, b) => {
+    const x = a[key], y = b[key];
+    // students with no exams always sink to the bottom when sorting by score
+    if (x == null && y == null) return 0; if (x == null) return 1; if (y == null) return -1;
+    const c = typeof x === "number" ? x - y : String(x).localeCompare(String(y));
+    return dir === "asc" ? c : -c;
+  });
+  return rows;
+}
+
+function renderStudents() {
+  const rows = visibleStudents();
+  $("detail-sub").textContent = `${rows.length} student${rows.length === 1 ? "" : "s"} shown`;
+  const arrow = (k) => (sel.sort.key === k ? (sel.sort.dir === "asc" ? " ▲" : " ▼") : "");
+  $("student-table").innerHTML = `<thead class="bg-gray-50 text-left text-gray-600"><tr>${COLS.map(([k, l]) => `<th class="p-3 sortable" data-k="${k}">${l}${arrow(k)}</th>`).join("")}</tr></thead>
+    <tbody>${rows.slice(0, 500).map((s) => `<tr class="border-t"><td class="p-3 font-medium">${esc(s.full_name)}</td>
+      <td class="p-3">${esc(s.class_level)}</td><td class="p-3">${esc(s.section)}</td><td class="p-3">${s.exams}</td>
+      <td class="p-3">${s.avg == null ? '<span class="text-gray-400">No exam yet</span>' : `${pct(s.avg)} <span class="ml-2 text-xs px-2 py-0.5 rounded-full ${s.avg >= PASS_MARK ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}">${s.avg >= PASS_MARK ? "Pass" : "Fail"}</span>`}</td></tr>`).join("") || `<tr><td class="p-4 text-gray-500" colspan="5">No students match.</td></tr>`}</tbody>`;
+  if (rows.length > 500) $("detail-sub").textContent += " (first 500 displayed – narrow with the search or export CSV for all)";
+  document.querySelectorAll("#student-table th.sortable").forEach((th) => (th.onclick = () => {
+    const k = th.dataset.k;
+    sel.sort = { key: k, dir: sel.sort.key === k && sel.sort.dir === "asc" ? "desc" : "asc" };
+    renderStudents();
+  }));
+}
+
+function exportCsv() {
+  const rows = visibleStudents();
+  const csv = [["Class", "Section", "Student", "Exams", "Average %"], ...rows.map((s) => [s.class_level, s.section, s.full_name, s.exams, s.avg == null ? "" : Math.round(s.avg)])]
+    .map((r) => r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = `${sel.cls}-students.csv`;
+  a.click();
+}
+
+function barRow(label, value, extra = "") {
+  const cls = value == null ? "" : value < INTERVENTION_BELOW ? "warn" : value < PASS_MARK ? "mid" : "";
+  return `<div class="py-1.5"><div class="flex justify-between text-sm"><span>${esc(label)}</span><span class="text-gray-600">${pct(value)} ${extra}</span></div><div class="bar ${cls}"><i style="width:${Math.max(0, Math.min(100, value || 0))}%"></i></div></div>`;
+}
+
+function panel(title, body, note = "") {
+  return `<div class="bg-white border rounded-xl p-4"><h3 class="font-semibold mb-2">${title}</h3>${body || '<p class="text-sm text-gray-500">No data yet.</p>'}${note ? `<p class="text-xs text-gray-400 mt-2">${note}</p>` : ""}</div>`;
+}
+
+function renderPanels() {
+  const avgBy = (rows, keyFn) => Object.entries(group(rows, keyFn)).map(([k, rs]) => [k, avg(rs.map((r) => r.p)), rs.length]).sort((a, b) => b[1] - a[1]);
+  const withStudent = results.filter((r) => r.s);
+  const list = (arr, n = 10) => arr.slice(0, n).map(([k, v, c]) => barRow(k, v, `· ${fmt(c)} exams`)).join("");
+  const sectionLabel = (s) => (s === "Senior" ? "Senior (SS 1–3)" : s === "Junior" ? "Junior (JSS 1–3)" : s);
+
+  const bySubject = avgBy(results, subjectOf);
+  const byClass = avgBy(withStudent, (r) => r.s.class_level).sort((a, b) => classRank(a[0]) - classRank(b[0]));
+  const bySection = avgBy(withStudent, (r) => sectionLabel(r.s.section));
+  const byYear = Object.entries(group(results, (r) => new Date(r.created_at).getFullYear())).sort().map(([y, rs]) => [y, avg(rs.map((r) => r.p)), rs.length]);
+
+  // participation: Senior vs Junior, and by class
+  const sectionPart = Object.entries(group(studentRows, (s) => sectionLabel(s.section))).map(([k, ss]) => [k, (ss.filter((s) => s.exams > 0).length / ss.length) * 100, ss.length]).sort((a, b) => b[1] - a[1]);
+  const part = classStats().map((r) => [r.cls, r.part, r.students]);
+
+  // classes requiring intervention
+  const cg = group(withStudent, (r) => r.s.class_level);
+  const weak = Object.entries(cg).map(([k, rs]) => [k, avg(rs.map((r) => r.p)), rs.length]).filter(([, a, c]) => c >= MIN_ATTEMPTS && a < INTERVENTION_BELOW).sort((a, b) => a[1] - b[1]);
+
+  const inc = Object.entries(group(incidents, (i) => i.kind)).sort((a, b) => b[1].length - a[1].length);
+
+  $("panels").innerHTML = [
+    panel("Performance by subject", list(bySubject, 30)),
+    panel("Performance by class", list(byClass)),
+    panel("Senior vs Junior performance", list(bySection), "Based on the school type (Senior or Junior) chosen at registration."),
+    panel("Senior vs Junior participation", sectionPart.map(([l, v, c]) => barRow(l, v, `· ${fmt(c)} students`)).join(""), "% of registered students in each section who have taken at least one exam."),
+    panel("Year-to-year performance trend", byYear.map(([y, v, c]) => barRow(y, v, `· ${fmt(c)} exams`)).join("")),
+    panel("Participation rate by class", part.map(([l, v, c]) => barRow(l, v, `· ${fmt(c)} students`)).join(""), "% of registered students who have taken at least one exam."),
+    panel("Examination irregularities", inc.map(([k, rs]) => `<div class="flex justify-between text-sm py-1"><span>${esc(k.replace(/_/g, " "))}</span><b>${fmt(rs.length)}</b></div>`).join(""), "Shows data once the exam page writes to the exam_incidents table."),
+    panel(`Classes requiring intervention (average below ${INTERVENTION_BELOW}%, at least ${MIN_ATTEMPTS} exams)`, weak.map(([k, v, c]) => barRow(k, v, `· ${c} exams`)).join("")),
+  ].join("");
+}
+
+$("class-search").oninput = renderClassTable;
+$("f-search").oninput = renderStudents;
+$("export").onclick = exportCsv;
+$("close-detail").onclick = () => $("class-detail").classList.add("hidden");
+$("logout").onclick = async () => { await db.auth.signOut(); localStorage.removeItem("supabase_access_token"); location.href = "register.html"; };
+init();
+</script>
+</body>
+</html>

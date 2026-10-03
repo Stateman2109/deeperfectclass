@@ -1,0 +1,762 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Exam Setup | Dee-Perfect Class International Secondary School</title>
+    <link rel="icon" type="image/png" href="./img/logo.png" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#e3e4ee",
+              "on-tertiary-container": "#00243a",
+              "on-tertiary-fixed-variant": "#004a70",
+              "surface-bright": "#f8f9ff",
+              "on-secondary-fixed": "#001e2f",
+              "secondary-container": "#c7ebff",
+              tertiary: "#0b7bb5",
+              surface: "#f8f9ff",
+              "secondary-fixed": "#c7ebff",
+              "primary-fixed": "#c9ccff",
+              "on-error": "#ffffff",
+              "on-surface": "#191b24",
+              "inverse-primary": "#9fa5ff",
+              "surface-dim": "#d9dae6",
+              "tertiary-fixed": "#8fdcff",
+              "on-tertiary-fixed": "#001d2e",
+              secondary: "#0f8fd6",
+              primary: "#14185f",
+              "on-primary-container": "#dfe3ff",
+              "primary-fixed-dim": "#9fa5ff",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#7fcdf5",
+              "error-container": "#ffdad6",
+              "on-secondary-container": "#004a6e",
+              "inverse-on-surface": "#f0f0fa",
+              "on-surface-variant": "#444659",
+              "surface-container": "#ecedf7",
+              "primary-container": "#2d3394",
+              outline: "#757689",
+              error: "#ba1a1a",
+              "surface-tint": "#3a40b0",
+              "on-tertiary": "#ffffff",
+              "tertiary-container": "#35b6f2",
+              "on-background": "#191b24",
+              "on-secondary": "#ffffff",
+              "on-primary": "#ffffff",
+              "outline-variant": "#c5c6dc",
+              "on-primary-fixed-variant": "#2a2f8f",
+              "tertiary-fixed-dim": "#5cc8f7",
+              background: "#f8f9ff",
+              "inverse-surface": "#2e303a",
+              "surface-variant": "#e3e4ee",
+              "on-secondary-fixed-variant": "#004a6e",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed": "#00023f",
+              "surface-container-high": "#e6e7f1",
+              "surface-container-low": "#f1f2fb",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              md: "24px",
+              lg: "40px",
+              gutter: "24px",
+              "container-max": "1280px",
+              xs: "4px",
+              xl: "64px",
+              base: "8px",
+              sm: "12px",
+            },
+            fontFamily: {
+              "label-sm": ["Inter"],
+              "body-md": ["Inter"],
+              "body-lg": ["Inter"],
+              "label-md": ["Inter"],
+              "display-lg": ["Inter"],
+              "headline-sm": ["Inter"],
+              "headline-md": ["Inter"],
+            },
+            fontSize: {
+              "label-sm": ["12px", { lineHeight: "16px", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "20px",
+                  letterSpacing: "0.01em",
+                  fontWeight: "500",
+                },
+              ],
+              "display-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-sm": [
+                "20px",
+                { lineHeight: "28px", fontWeight: "600" },
+              ],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .step-transition {
+        transition: all 0.3s ease-in-out;
+      }
+      .hidden-step {
+        display: none;
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      .active-step {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .selection-card {
+        border: 1px solid #c5c6dc;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .selection-card:hover {
+        border-color: #14185f;
+        background-color: #f1f2fb;
+      }
+      .selection-card.selected {
+        border: 2px solid #14185f;
+        background-color: #dfe3ff;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="bg-surface-bright text-on-surface min-h-screen flex flex-col">
+    <!-- TopAppBar Navigation Shell -->
+    <header
+      class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-white shadow-sm border-b border-outline-variant"
+    >
+      <div class="flex items-center gap-3">
+        <img
+          alt="Dee-Perfect Class International Secondary School logo"
+          class="h-10 w-10 object-contain"
+          src="img/logo.png"
+        />
+        <span class="font-headline-md text-headline-md font-bold text-primary"
+          >DEE-PERFECT CLASS CBT</span
+        >
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="hidden md:flex items-center gap-6 mr-6">
+          <a
+            class="font-label-md text-label-md text-primary font-bold"
+            href="/student-dashboard"
+            >Dashboard</a
+          >
+          <a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
+            href="/exam-setup"
+            >Exams</a
+          >
+          <a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors"
+            href="/exam-result"
+            >Reports</a
+          >
+        </div>
+        <div
+          class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant"
+        >
+          <img
+            class="w-full h-full object-cover"
+            data-alt="A professional headshot of a student in a clean academic setting, smiling with confidence. The lighting is soft and high-key, reflecting a bright and modern educational environment. The style is minimalist and corporate, using a palette of soft greys and navy blue."
+            src="img/ceo.png"
+          />
+        </div>
+      </div>
+    </header>
+    <!-- Main Content Canvas -->
+    <main
+      class="flex-grow pt-24 pb-20 px-4 md:px-lg flex items-center justify-center"
+    >
+      <div
+        class="w-full max-container-max max-w-2xl bg-white rounded-xl shadow-sm border border-outline-variant p-md md:p-lg"
+      >
+        <!-- Progress Header -->
+        <div class="mb-lg">
+          <div class="flex justify-between items-end mb-4">
+            <div>
+              <h1 class="font-headline-md text-headline-md text-primary">
+                Configure Your Session
+              </h1>
+              <p
+                class="font-body-md text-body-md text-on-surface-variant"
+                id="step-description"
+              >
+                Select your examination body to begin.
+              </p>
+            </div>
+            <span
+              class="font-label-md text-label-md text-primary bg-primary-fixed px-3 py-1 rounded-full"
+              id="step-indicator"
+              >Step 1 of 4</span
+            >
+          </div>
+          <!-- Progress Bar -->
+          <div
+            class="w-full h-1 bg-surface-container rounded-full overflow-hidden"
+          >
+            <div
+              class="h-full bg-primary transition-all duration-500"
+              id="progress-fill"
+              style="width: 25%"
+            ></div>
+          </div>
+        </div>
+        <!-- Step 1: Exam Type -->
+        <div class="active-step step-transition space-y-4" id="step-1">
+          <div class="grid grid-cols-1 gap-3">
+            <button
+              class="selection-card p-4 rounded-lg text-left flex items-center gap-4 cursor-pointer group"
+              onclick="selectOption('examType', 'WAEC', this)"
+            >
+              <div
+                class="w-12 h-12 rounded bg-surface-container flex items-center justify-center group-hover:bg-primary-fixed-dim transition-colors"
+              >
+                <span class="material-symbols-outlined text-primary"
+                  >description</span
+                >
+              </div>
+              <div>
+                <p
+                  class="font-label-md text-label-md font-bold text-on-surface"
+                >
+                  WAEC
+                </p>
+                <p class="font-body-md text-sm text-on-surface-variant">
+                  West African Examinations Council
+                </p>
+              </div>
+            </button>
+            <button
+              class="selection-card p-4 rounded-lg text-left flex items-center gap-4 cursor-pointer group"
+              onclick="selectOption('examType', 'NECO', this)"
+            >
+              <div
+                class="w-12 h-12 rounded bg-surface-container flex items-center justify-center group-hover:bg-primary-fixed-dim transition-colors"
+              >
+                <span class="material-symbols-outlined text-primary"
+                  >assignment</span
+                >
+              </div>
+              <div>
+                <p
+                  class="font-label-md text-label-md font-bold text-on-surface"
+                >
+                  NECO
+                </p>
+                <p class="font-body-md text-sm text-on-surface-variant">
+                  National Examinations Council
+                </p>
+              </div>
+            </button>
+            <button
+              class="selection-card p-4 rounded-lg text-left flex items-center gap-4 cursor-pointer group"
+              onclick="selectOption('examType', 'JAMB', this)"
+            >
+              <div
+                class="w-12 h-12 rounded bg-surface-container flex items-center justify-center group-hover:bg-primary-fixed-dim transition-colors"
+              >
+                <span class="material-symbols-outlined text-primary"
+                  >history_edu</span
+                >
+              </div>
+              <div>
+                <p
+                  class="font-label-md text-label-md font-bold text-on-surface"
+                >
+                  JAMB
+                </p>
+                <p class="font-body-md text-sm text-on-surface-variant">
+                  Joint Admissions and Matriculation Board
+                </p>
+              </div>
+            </button>
+          </div>
+        </div>
+        <!-- Step 2: Year Selection -->
+        <div class="hidden-step step-transition" id="step-2">
+          <div
+            class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2"
+            id="year-grid"
+          >
+            <!-- Year buttons will be injected here by JS -->
+          </div>
+        </div>
+        <!-- Step 3: Category -->
+        <div class="hidden-step step-transition space-y-4" id="step-3">
+          <div class="grid grid-cols-1 gap-3">
+            <button
+              class="selection-card p-4 rounded-lg text-left flex items-center gap-4 cursor-pointer"
+              onclick="selectOption('category', 'Science', this)"
+            >
+              <span class="material-symbols-outlined text-primary"
+                >biotech</span
+              >
+              <span class="font-label-md text-label-md font-bold">Science</span>
+            </button>
+            <button
+              class="selection-card p-4 rounded-lg text-left flex items-center gap-4 cursor-pointer"
+              onclick="selectOption('category', 'Art', this)"
+            >
+              <span class="material-symbols-outlined text-primary"
+                >palette</span
+              >
+              <span class="font-label-md text-label-md font-bold">Art</span>
+            </button>
+            <button
+              class="selection-card p-4 rounded-lg text-left flex items-center gap-4 cursor-pointer"
+              onclick="selectOption('category', 'Commercial', this)"
+            >
+              <span class="material-symbols-outlined text-primary"
+                >payments</span
+              >
+              <span class="font-label-md text-label-md font-bold"
+                >Commercial</span
+              >
+            </button>
+          </div>
+        </div>
+        <!-- Step 4: Subject Selection -->
+        <div class="hidden-step step-transition space-y-4" id="step-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="subject-grid">
+            <!-- Subjects injected here -->
+          </div>
+        </div>
+        <!-- Summary Step (Step 5) -->
+        <div class="hidden-step step-transition" id="step-5">
+          <div
+            class="bg-surface-container-low rounded-xl p-md border border-outline-variant space-y-6"
+          >
+            <div class="text-center">
+              <div
+                class="inline-flex items-center justify-center w-16 h-16 bg-on-tertiary-container text-tertiary rounded-full mb-3"
+              >
+                <span
+                  class="material-symbols-outlined text-3xl"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >task_alt</span
+                >
+              </div>
+              <h2 class="font-headline-sm text-headline-sm text-primary">
+                Ready to Begin?
+              </h2>
+              <p class="font-body-md text-on-surface-variant">
+                Review your selection before starting the timed exam.
+              </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div
+                class="bg-white p-4 rounded-lg border border-outline-variant"
+              >
+                <p
+                  class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider"
+                >
+                  Exam Body
+                </p>
+                <p class="font-headline-sm text-primary" id="summary-exam">-</p>
+              </div>
+              <div
+                class="bg-white p-4 rounded-lg border border-outline-variant"
+              >
+                <p
+                  class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider"
+                >
+                  Academic Year
+                </p>
+                <p class="font-headline-sm text-primary" id="summary-year">-</p>
+              </div>
+              <div
+                class="bg-white p-4 rounded-lg border border-outline-variant"
+              >
+                <p
+                  class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider"
+                >
+                  Category
+                </p>
+                <p class="font-headline-sm text-primary" id="summary-category">
+                  -
+                </p>
+              </div>
+              <div
+                class="bg-white p-4 rounded-lg border border-outline-variant"
+              >
+                <p
+                  class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider"
+                >
+                  Subject
+                </p>
+                <p class="font-headline-sm text-primary" id="summary-subject">
+                  -
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex items-start gap-3 bg-tertiary-fixed-dim/20 p-4 rounded-lg border border-tertiary-fixed"
+            >
+              <span
+                class="material-symbols-outlined text-on-tertiary-fixed-variant"
+                >info</span
+              >
+              <p class="font-body-md text-sm text-on-tertiary-fixed-variant">
+                Once you start, the timer will begin. Make sure your device is
+                charged and your connection is stable.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Controls -->
+        <div
+          class="mt-lg pt-md border-t border-outline-variant flex justify-between items-center"
+        >
+          <button
+            class="flex items-center gap-2 px-6 py-2 rounded-lg border border-primary text-primary font-bold hover:bg-primary-fixed-dim transition-colors disabled:opacity-0"
+            disabled=""
+            id="prevBtn"
+            onclick="prevStep()"
+          >
+            <span class="material-symbols-outlined">arrow_back</span>
+            Back
+          </button>
+          <button
+            class="flex items-center gap-2 px-8 py-2 rounded-lg bg-primary text-white font-bold hover:opacity-90 active:scale-95 transition-all"
+            id="nextBtn"
+            onclick="nextStep()"
+          >
+            Next
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+          <button
+            class="hidden flex items-center gap-1 px-3 py-1 md:gap-2 md:px-8 md:py-3 rounded-lg bg-primary text-white text-sm font-bold hover:opacity-90 active:scale-95 transition-all shadow-md"
+            id="startBtn"
+            onclick="startExam()"
+          >
+            Start Exam
+            <span class="material-symbols-outlined">rocket_launch</span>
+          </button>
+        </div>
+      </div>
+    </main>
+    <!-- BottomNavBar for Mobile Shell -->
+    <nav
+      class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 pb-safe bg-surface-container-lowest shadow-lg border-t border-outline-variant rounded-t-xl"
+    >
+      <div
+        class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1"
+      >
+        <span
+          class="material-symbols-outlined"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+          >home</span
+        >
+        <span class="font-label-sm text-label-sm"
+          ><a href="/student-dashboard">Home</a></span
+        >
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1"
+      >
+        <span class="material-symbols-outlined">assignment</span>
+        <span class="font-label-sm text-label-sm">Tests</span>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1"
+      >
+        <span class="material-symbols-outlined">smart_toy</span>
+        <span class="font-label-sm text-label-sm"
+          ><a href="/ai-academic">AI Chat</a></span
+        >
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1"
+      >
+        <span class="material-symbols-outlined">person</span>
+        <span class="font-label-sm text-label-sm"><a href="/">Logout</a></span>
+      </div>
+    </nav>
+    <script>
+      let currentStep = 1;
+      const totalSteps = 4; // Final summary is additional
+      const selections = {
+        examType: "",
+        year: "",
+        category: "",
+        subject: "",
+      };
+
+      const subjects = {
+        Science: [
+          "Mathematics",
+          "English Language",
+          "Physics",
+          "Chemistry",
+          "Biology",
+          "Further Mathematics",
+          "Economics",
+          "Agricultural Science",
+          "Geography",
+          "Home Economics",
+          "PHE",
+        ],
+        Art: [
+          "Mathematics",
+          "English Language",
+          "Literature in English",
+          "Government",
+          "History",
+          "Christian Religious Studies",
+          "Civic Education",
+          "Yoruba",
+          "Arabic",
+          "IRK",
+          "Hausa",
+          "Igbo",
+          "French",
+          "Fine Arts",
+          "Music",
+        ],
+        Commercial: [
+          "Mathematics",
+          "English Language",
+          "Financial Accounting",
+          "Commerce",
+          "Economics",
+          "Marketing",
+        ],
+      };
+
+      const stepDescriptions = [
+        "Select your examination body to begin.",
+        "Choose the past question year you want to practice.",
+        "Select your academic department category.",
+        "Select the specific subject for this session.",
+        "Confirmation: All parameters are set.",
+      ];
+
+      function initYears() {
+        const grid = document.getElementById("year-grid");
+        for (let year = 2025; year >= 1994; year--) {
+          const btn = document.createElement("button");
+          btn.className =
+            "selection-card py-2 px-3 rounded-lg text-center font-label-md cursor-pointer";
+          btn.textContent = year;
+          btn.onclick = (e) => selectOption("year", year, btn);
+          grid.appendChild(btn);
+        }
+      }
+
+      function initSubjects(category) {
+        const grid = document.getElementById("subject-grid");
+        grid.innerHTML = "";
+        const list = subjects[category] || subjects["Science"];
+        list.forEach((subj) => {
+          const btn = document.createElement("button");
+          btn.className =
+            "selection-card p-4 rounded-lg text-left flex items-center justify-between cursor-pointer";
+          btn.innerHTML = `
+                    <span class="font-label-md text-label-md font-bold">${subj}</span>
+                    <span class="material-symbols-outlined text-sm opacity-0 group-[.selected]:opacity-100">check_circle</span>
+                `;
+          btn.onclick = () => selectOption("subject", subj, btn);
+          grid.appendChild(btn);
+        });
+      }
+
+      function selectOption(key, value, element) {
+        selections[key] = value;
+
+        // Remove selection from siblings
+        const parent = element.parentElement;
+        Array.from(parent.children).forEach((child) =>
+          child.classList.remove("selected"),
+        );
+        element.classList.add("selected");
+
+        // Trigger conditional logic
+        if (key === "category") {
+          initSubjects(value);
+        }
+      }
+
+      function updateProgress() {
+        const fill = document.getElementById("progress-fill");
+        const indicator = document.getElementById("step-indicator");
+        const desc = document.getElementById("step-description");
+
+        const percentage =
+          currentStep === 5 ? 100 : (currentStep / totalSteps) * 100;
+        fill.style.width = `${percentage}%`;
+
+        if (currentStep <= 4) {
+          indicator.textContent = `Step ${currentStep} of 4`;
+          indicator.classList.remove("hidden");
+        } else {
+          indicator.classList.add("hidden");
+        }
+
+        desc.textContent = stepDescriptions[currentStep - 1];
+      }
+
+      function nextStep() {
+        // Validation
+        const key = ["examType", "year", "category", "subject"][
+          currentStep - 1
+        ];
+        if (currentStep <= 4 && !selections[key]) {
+          alert(
+            `Please select a ${key.replace(/([A-Z])/g, " $1").toLowerCase()} before proceeding.`,
+          );
+          return;
+        }
+
+        if (currentStep < 5) {
+          document
+            .getElementById(`step-${currentStep}`)
+            .classList.replace("active-step", "hidden-step");
+          currentStep++;
+          document
+            .getElementById(`step-${currentStep}`)
+            .classList.replace("hidden-step", "active-step");
+
+          if (currentStep === 5) {
+            showSummary();
+          }
+        }
+
+        updateControls();
+        updateProgress();
+      }
+
+      function prevStep() {
+        if (currentStep > 1) {
+          document
+            .getElementById(`step-${currentStep}`)
+            .classList.replace("active-step", "hidden-step");
+          currentStep--;
+          document
+            .getElementById(`step-${currentStep}`)
+            .classList.replace("hidden-step", "active-step");
+        }
+
+        updateControls();
+        updateProgress();
+      }
+
+      function updateControls() {
+        const nextBtn = document.getElementById("nextBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        const startBtn = document.getElementById("startBtn");
+
+        prevBtn.disabled = currentStep === 1;
+
+        if (currentStep === 5) {
+          nextBtn.classList.add("hidden");
+          startBtn.classList.remove("hidden");
+        } else {
+          nextBtn.classList.remove("hidden");
+          startBtn.classList.add("hidden");
+        }
+      }
+
+      function showSummary() {
+        document.getElementById("summary-exam").textContent =
+          selections.examType;
+        document.getElementById("summary-year").textContent = selections.year;
+        document.getElementById("summary-category").textContent =
+          selections.category;
+        document.getElementById("summary-subject").textContent =
+          selections.subject;
+      }
+
+      // function startExam() {
+      //   const startBtn = document.getElementById("startBtn");
+      //   startBtn.innerHTML = `Starting Session... <span class="material-symbols-outlined animate-spin">sync</span>`;
+      //   setTimeout(() => {
+      //     alert("Navigating to Exam Environment...");
+      //     window.location.reload();
+      //   }, 1500);
+      // }
+
+      window.onload = () => {
+        initYears();
+      };
+      function startExam() {
+        const startBtn = document.getElementById("startBtn");
+
+        startBtn.innerHTML = `Starting Session...`;
+
+        // ✅ GET DATA FROM selections (NOT HTML)
+        const examData = {
+          type: selections.examType,
+          year: selections.year,
+          subject: selections.subject,
+          category: selections.category,
+        };
+
+        console.log("Saving examData:", examData);
+
+        // ✅ SAVE
+        localStorage.setItem("examData", JSON.stringify(examData));
+
+        setTimeout(() => {
+          window.location.href = "exam.html";
+        }, 1000);
+      }
+    </script>
+    <script src="./scripts/supabase.min.js"></script>
+    <script src="./scripts/site.js"></script>
+  </body>
+</html>

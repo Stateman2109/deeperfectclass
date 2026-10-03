@@ -1,0 +1,559 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="theme-color" content="#14185f" />
+    <link rel="icon" type="image/png" href="./img/logo.png" />
+    <title>Dee-Perfect Class International Secondary School | CBT Portal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      /* Same palette as index.html, taken from the school logo:
+         deep navy #14185f, royal blue #2d3394, sky blue #1fa3e6 */
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#e3e4ee",
+              "on-tertiary-container": "#00243a",
+              "on-tertiary-fixed-variant": "#004a70",
+              "surface-bright": "#f8f9ff",
+              "on-secondary-fixed": "#001e2f",
+              "secondary-container": "#c7ebff",
+              tertiary: "#0b7bb5",
+              surface: "#f8f9ff",
+              "secondary-fixed": "#c7ebff",
+              "primary-fixed": "#c9ccff",
+              "on-error": "#ffffff",
+              "on-surface": "#191b24",
+              "inverse-primary": "#9fa5ff",
+              "surface-dim": "#d9dae6",
+              "tertiary-fixed": "#8fdcff",
+              "on-tertiary-fixed": "#001d2e",
+              secondary: "#0f8fd6",
+              primary: "#14185f",
+              "on-primary-container": "#dfe3ff",
+              "primary-fixed-dim": "#9fa5ff",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#7fcdf5",
+              "error-container": "#ffdad6",
+              "on-secondary-container": "#004a6e",
+              "inverse-on-surface": "#f0f0fa",
+              "on-surface-variant": "#444659",
+              "surface-container": "#ecedf7",
+              "primary-container": "#2d3394",
+              outline: "#757689",
+              error: "#ba1a1a",
+              "surface-tint": "#3a40b0",
+              "on-tertiary": "#ffffff",
+              "tertiary-container": "#35b6f2",
+              "on-background": "#191b24",
+              "on-secondary": "#ffffff",
+              "on-primary": "#ffffff",
+              "outline-variant": "#c5c6dc",
+              "on-primary-fixed-variant": "#2a2f8f",
+              "tertiary-fixed-dim": "#5cc8f7",
+              background: "#f8f9ff",
+              "inverse-surface": "#2e303a",
+              "surface-variant": "#e3e4ee",
+              "on-secondary-fixed-variant": "#004a6e",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed": "#00023f",
+              "surface-container-high": "#e6e7f1",
+              "surface-container-low": "#f1f2fb",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              md: "24px",
+              lg: "40px",
+              gutter: "24px",
+              "container-max": "1280px",
+              xs: "4px",
+              xl: "64px",
+              base: "8px",
+              sm: "12px",
+            },
+            fontFamily: {
+              "label-sm": ["Inter"],
+              "body-md": ["Inter"],
+              "body-lg": ["Inter"],
+              "label-md": ["Inter"],
+              "display-lg": ["Inter"],
+              "headline-sm": ["Inter"],
+              "headline-md": ["Inter"],
+            },
+            fontSize: {
+              "label-sm": ["12px", { lineHeight: "16px", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "20px",
+                  letterSpacing: "0.01em",
+                  fontWeight: "500",
+                },
+              ],
+              "display-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-sm": [
+                "20px",
+                { lineHeight: "28px", fontWeight: "600" },
+              ],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #f8f9ff;
+        font-family: "Inter", sans-serif;
+        overflow-x: hidden;
+      }
+      .auth-card {
+        box-shadow: 0px 4px 12px rgba(20, 24, 95, 0.08);
+        border: 1px solid #dcdcec;
+      }
+      .tab-active {
+        border-bottom: 2px solid #14185f;
+        color: #14185f;
+        font-weight: 600;
+      }
+      .tab-inactive {
+        border-bottom: 2px solid transparent;
+        color: #444659;
+        font-weight: 500;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .input-focus:focus {
+        border-color: #2d3394;
+        box-shadow: 0 0 0 1px #2d3394;
+      }
+    </style>
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <!-- Hero Background Element (Visual Texture) -->
+    <div class="fixed inset-0 pointer-events-none opacity-5 overflow-hidden">
+      <div
+        class="absolute -top-24 -left-24 w-96 h-96 bg-primary rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute top-1/2 -right-48 w-[600px] h-[600px] bg-tertiary-container rounded-full blur-[120px]"
+      ></div>
+    </div>
+    <!-- Main Content Container -->
+    <main
+      class="flex-grow flex items-center justify-center p-gutter relative z-10"
+    >
+      <div class="w-full max-w-[480px]">
+        <!-- Brand Identity Section -->
+        <div class="flex flex-col items-center mb-10 text-center">
+          <img
+            alt="Dee-Perfect Class International Secondary School logo"
+            class="w-24 h-24 mb-6 drop-shadow-sm object-contain"
+            src="img/logo.png"
+          />
+          <h1
+            class="font-display-lg text-display-lg text-primary tracking-tight"
+          >
+            DEE-PERFECT CLASS CBT
+          </h1>
+          <p
+            class="font-label-md text-label-md text-secondary mt-1 uppercase tracking-wide"
+          >
+            International Secondary School, Ifon-Osun
+          </p>
+          <p
+            class="font-body-md text-body-md text-on-surface-variant mt-2 max-w-xs"
+          >
+            Distinguished educational excellence through digital precision.
+          </p>
+        </div>
+        <!-- Auth Container -->
+        <div
+          class="auth-card bg-surface-container-lowest rounded-xl overflow-hidden"
+        >
+          <!-- Tab Headers -->
+          <div class="flex border-b border-outline-variant">
+            <button
+              class="flex-1 py-4 font-label-md text-label-md text-center transition-all tab-active"
+              id="tab-login"
+              onclick="toggleAuth('login')"
+            >
+              Login
+            </button>
+            <button
+              class="flex-1 py-4 font-label-md text-label-md text-center transition-all tab-inactive"
+              id="tab-signup"
+              onclick="toggleAuth('signup')"
+            >
+              Create Account
+            </button>
+          </div>
+          <div class="p-8">
+            <!-- Login Form -->
+            <div class="space-y-6" id="form-login">
+              <div class="space-y-2">
+                <h2 class="font-headline-md text-headline-md text-on-surface">
+                  Welcome Back
+                </h2>
+                <p class="font-body-md text-body-md text-on-surface-variant">
+                  Please enter your credentials to access the examination
+                  portal.
+                </p>
+              </div>
+              <form id="login-form" class="space-y-4">
+                <div class="space-y-1">
+                  <label
+                    class="font-label-md text-label-md text-on-surface-variant block"
+                    >Email Address</label
+                  >
+                  <div class="relative">
+                    <span
+                      class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]"
+                      >mail</span
+                    >
+                    <input
+                      id="login-email"
+                      name="email"
+                      class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md input-focus outline-none transition-all"
+                      placeholder="student@academic.edu"
+                      type="email"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <div class="flex justify-between items-center">
+                    <label
+                      class="font-label-md text-label-md text-on-surface-variant"
+                      >Password</label
+                    >
+                    <a
+                      class="font-label-sm text-label-sm text-primary hover:underline"
+                      href="#"
+                      >Forgot password?</a
+                    >
+                  </div>
+                  <div class="relative">
+                    <span
+                      class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]"
+                      >lock</span
+                    >
+                    <input
+                      id="login-password"
+                      name="password"
+                      class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md input-focus outline-none transition-all"
+                      placeholder="••••••••"
+                      type="password"
+                    />
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 pt-2">
+                  <input
+                    class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary"
+                    id="remember"
+                    type="checkbox"
+                  />
+                  <label
+                    class="font-label-md text-label-md text-on-surface-variant"
+                    for="remember"
+                    >Keep me logged in on this device</label
+                  >
+                </div>
+                <button
+                  class="w-full py-4 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-md mt-4"
+                  type="submit"
+                >
+                  Sign In to Portal
+                </button>
+              </form>
+            </div>
+            <!-- Sign Up Form (Hidden by Default) -->
+            <div class="hidden space-y-6" id="form-signup">
+              <div class="space-y-2">
+                <h2 class="font-headline-md text-headline-md text-on-surface">
+                  Start Your Journey
+                </h2>
+                <p class="font-body-md text-body-md text-on-surface-variant">
+                  Register to begin your computer-based testing preparation.
+                </p>
+              </div>
+              <form id="signup-form" class="space-y-4">
+                <div class="space-y-1">
+                  <label
+                    class="font-label-md text-label-md text-on-surface-variant block"
+                    >Full Name</label
+                  >
+                  <div class="relative">
+                    <span
+                      class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]"
+                      >person</span
+                    >
+                    <input
+                      id="signup-name"
+                      name="fullName"
+                      class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md input-focus outline-none transition-all"
+                      placeholder="John Doe"
+                      type="text"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <label
+                    class="font-label-md text-label-md text-on-surface-variant block"
+                    >Email Address</label
+                  >
+                  <div class="relative">
+                    <span
+                      class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]"
+                      >mail</span
+                    >
+                    <input
+                      id="signup-email"
+                      name="email"
+                      class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md input-focus outline-none transition-all"
+                      placeholder="student@academic.edu"
+                      type="email"
+                    />
+                  </div>
+                </div>
+
+                <!--
+                  The LGA dropdown and the school-name picker were removed (single school).
+                  These hidden fields keep the old element ids in the page so site.js does not
+                  hit a missing element. The school name is fixed to this school.
+                -->
+                <input type="hidden" id="signup-lga" name="lga" value="" />
+                <input
+                  type="hidden"
+                  id="signup-school"
+                  name="schoolName"
+                  value="Dee-Perfect Class International Secondary School"
+                />
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-1">
+                    <label
+                      class="font-label-md text-label-md text-on-surface-variant block"
+                      for="signup-school-type"
+                      >School Type</label
+                    >
+                    <select
+                      id="signup-school-type"
+                      name="schoolType"
+                      class="w-full px-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md input-focus outline-none transition-all"
+                      required
+                    >
+                      <option value="">Select type</option>
+                      <option value="senior">Senior</option>
+                      <option value="junior">Junior</option>
+                    </select>
+                  </div>
+                  <div class="space-y-1">
+                    <label
+                      class="font-label-md text-label-md text-on-surface-variant block"
+                      for="signup-class"
+                      >Class</label
+                    >
+                    <select
+                      id="signup-class"
+                      name="classLevel"
+                      class="w-full px-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md input-focus outline-none transition-all"
+                      required
+                    >
+                      <option value="">Select class</option>
+                      <option value="JSS 1">JSS 1</option>
+                      <option value="JSS 2">JSS 2</option>
+                      <option value="JSS 3">JSS 3</option>
+                      <option value="SS 1">SS 1</option>
+                      <option value="SS 2">SS 2</option>
+                      <option value="SS 3">SS 3</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-1">
+                    <label
+                      class="font-label-md text-label-md text-on-surface-variant block"
+                      >Password</label
+                    >
+                    <div class="relative">
+                      <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]"
+                        >lock</span
+                      >
+                      <input
+                        id="signup-password"
+                        name="password"
+                        class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md input-focus outline-none transition-all"
+                        placeholder="••••••••"
+                        type="password"
+                      />
+                    </div>
+                  </div>
+                  <div class="space-y-1">
+                    <label
+                      class="font-label-md text-label-md text-on-surface-variant block"
+                      >Confirm Password</label
+                    >
+                    <div class="relative">
+                      <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]"
+                        >lock_reset</span
+                      >
+                      <input
+                        id="signup-confirm-password"
+                        name="confirmPassword"
+                        class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md input-focus outline-none transition-all"
+                        placeholder="••••••••"
+                        type="password"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="w-full py-4 bg-primary-container text-white font-label-md text-label-md rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-md mt-4"
+                  type="submit"
+                >
+                  Create Student Account
+                </button>
+              </form>
+            </div>
+            <!-- Institutional Footnote -->
+            <div
+              class="mt-10 pt-6 border-t border-outline-variant flex items-center justify-center gap-4 grayscale opacity-60"
+            >
+              <span
+                class="font-label-sm text-label-sm uppercase tracking-widest text-outline"
+                >Authorized Portal</span
+              >
+              <div class="w-1.5 h-1.5 rounded-full bg-outline"></div>
+              <span
+                class="font-label-sm text-label-sm uppercase tracking-widest text-outline"
+                >SECURE CBT-V3</span
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Accessibility/Links -->
+        <div class="flex justify-between items-center mt-8 px-2 gap-4">
+          <p class="font-label-sm text-label-sm text-on-surface-variant">
+            © 2026 DEE-PERFECT CLASS INTERNATIONAL SECONDARY SCHOOL
+          </p>
+          <div class="flex gap-4 shrink-0">
+            <a
+              class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors"
+              href="#"
+              >Privacy Policy</a
+            >
+            <a
+              class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors"
+              href="#"
+              >Technical Support</a
+            >
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Success Message Snackbar (Hidden by default) -->
+    <div
+      class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface px-6 py-3 rounded-full font-label-md text-label-md shadow-2xl opacity-0 translate-y-4 pointer-events-none transition-all duration-300 z-[100] flex items-center gap-3"
+      id="toast"
+    >
+      <span class="material-symbols-outlined text-tertiary-fixed"
+        >verified</span
+      >
+      <span id="toast-message">Success! Redirecting to dashboard...</span>
+    </div>
+    <script>
+      function toggleAuth(type) {
+        const loginForm = document.getElementById("form-login");
+        const signupForm = document.getElementById("form-signup");
+        const loginTab = document.getElementById("tab-login");
+        const signupTab = document.getElementById("tab-signup");
+
+        if (type === "login") {
+          loginForm.classList.remove("hidden");
+          signupForm.classList.add("hidden");
+          loginTab.classList.add("tab-active");
+          loginTab.classList.remove("tab-inactive");
+          signupTab.classList.remove("tab-active");
+          signupTab.classList.add("tab-inactive");
+        } else if (type === "signup") {
+          loginForm.classList.add("hidden");
+          signupForm.classList.remove("hidden");
+          signupTab.classList.add("tab-active");
+          signupTab.classList.remove("tab-inactive");
+          loginTab.classList.remove("tab-active");
+          loginTab.classList.add("tab-inactive");
+        }
+      }
+
+      // Show only the classes that match the chosen school type:
+      // Junior -> JSS 1-3, Senior -> SS 1-3.
+      (function () {
+        const typeSelect = document.getElementById("signup-school-type");
+        const classSelect = document.getElementById("signup-class");
+        if (!typeSelect || !classSelect) return;
+
+        const classes = {
+          junior: ["JSS 1", "JSS 2", "JSS 3"],
+          senior: ["SS 1", "SS 2", "SS 3"],
+        };
+        const allClasses = classes.junior.concat(classes.senior);
+
+        function fill(list) {
+          classSelect.innerHTML = "";
+          const placeholder = document.createElement("option");
+          placeholder.value = "";
+          placeholder.textContent = "Select class";
+          classSelect.appendChild(placeholder);
+          list.forEach(function (c) {
+            const opt = document.createElement("option");
+            opt.value = c;
+            opt.textContent = c;
+            classSelect.appendChild(opt);
+          });
+        }
+
+        typeSelect.addEventListener("change", function () {
+          fill(classes[typeSelect.value] || allClasses);
+        });
+      })();
+    </script>
+    <script src="./scripts/supabase.min.js"></script>
+    <script src="./scripts/site.js"></script>
+  </body>
+</html>

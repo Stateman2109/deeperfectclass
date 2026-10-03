@@ -1,0 +1,856 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Student Dashboard | Dee-Perfect Class International Secondary School</title>
+    <link rel="icon" type="image/png" href="./img/logo.png" />
+    <!-- Google Fonts & Material Symbols -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#e3e4ee",
+              "on-tertiary-container": "#00243a",
+              "on-tertiary-fixed-variant": "#004a70",
+              "surface-bright": "#f8f9ff",
+              "on-secondary-fixed": "#001e2f",
+              "secondary-container": "#c7ebff",
+              tertiary: "#0b7bb5",
+              surface: "#f8f9ff",
+              "secondary-fixed": "#c7ebff",
+              "primary-fixed": "#c9ccff",
+              "on-error": "#ffffff",
+              "on-surface": "#191b24",
+              "inverse-primary": "#9fa5ff",
+              "surface-dim": "#d9dae6",
+              "tertiary-fixed": "#8fdcff",
+              "on-tertiary-fixed": "#001d2e",
+              secondary: "#0f8fd6",
+              primary: "#14185f",
+              "on-primary-container": "#dfe3ff",
+              "primary-fixed-dim": "#9fa5ff",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#7fcdf5",
+              "error-container": "#ffdad6",
+              "on-secondary-container": "#004a6e",
+              "inverse-on-surface": "#f0f0fa",
+              "on-surface-variant": "#444659",
+              "surface-container": "#ecedf7",
+              "primary-container": "#2d3394",
+              outline: "#757689",
+              error: "#ba1a1a",
+              "surface-tint": "#3a40b0",
+              "on-tertiary": "#ffffff",
+              "tertiary-container": "#35b6f2",
+              "on-background": "#191b24",
+              "on-secondary": "#ffffff",
+              "on-primary": "#ffffff",
+              "outline-variant": "#c5c6dc",
+              "on-primary-fixed-variant": "#2a2f8f",
+              "tertiary-fixed-dim": "#5cc8f7",
+              background: "#f8f9ff",
+              "inverse-surface": "#2e303a",
+              "surface-variant": "#e3e4ee",
+              "on-secondary-fixed-variant": "#004a6e",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed": "#00023f",
+              "surface-container-high": "#e6e7f1",
+              "surface-container-low": "#f1f2fb",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              md: "24px",
+              lg: "40px",
+              gutter: "24px",
+              "container-max": "1280px",
+              xs: "4px",
+              xl: "64px",
+              base: "8px",
+              sm: "12px",
+            },
+            fontFamily: {
+              "label-sm": ["Inter"],
+              "body-md": ["Inter"],
+              "body-lg": ["Inter"],
+              "label-md": ["Inter"],
+              "display-lg": ["Inter"],
+              "headline-sm": ["Inter"],
+              "headline-md": ["Inter"],
+            },
+            fontSize: {
+              "label-sm": ["12px", { lineHeight: "16px", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "20px",
+                  letterSpacing: "0.01em",
+                  fontWeight: "500",
+                },
+              ],
+              "display-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-sm": [
+                "20px",
+                { lineHeight: "28px", fontWeight: "600" },
+              ],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #f8f9ff;
+        font-family: "Inter", sans-serif;
+        color: #191b24;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 24px;
+      }
+      .stats-gradient {
+        background: linear-gradient(135deg, #14185f 0%, #2d3394 100%);
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(224, 224, 224, 0.5);
+      }
+      .hover-lift {
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .hover-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(20, 24, 95, 0.12);
+      }
+    </style>
+  </head>
+  <body class="bg-surface-bright pb-24 lg:pb-0 lg:pl-72">
+    <!-- TopAppBar -->
+    <header
+      class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-white shadow-sm border-b border-outline-variant"
+    >
+      <div class="flex items-center gap-4">
+        <img
+          alt="Dee-Perfect Class International Secondary School logo"
+          class="h-9 w-9 object-contain"
+          src="img/logo.png"
+        />
+        <h1
+          class="font-headline-md text-headline-md font-bold text-primary tracking-tight"
+        >
+          DEE-PERFECT CLASS CBT
+        </h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="hidden md:flex flex-col items-end mr-2">
+          <span class="font-label-md text-label-md text-on-surface"
+            >DEE-PERFECT CLASS</span
+          >
+          <span class="font-label-sm text-label-sm text-on-surface-variant"
+            >ID: 882910</span
+          >
+        </div>
+        <!-- <div
+          class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-primary font-bold overflow-hidden border border-outline-variant"
+        >
+          <img
+            class="w-full h-full object-cover"
+            data-alt="A professional headshot of a college student, clean lighting, optimistic expression, neutral academic background, high-end photography."
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_CBUdvoFnxvG-MXwQ4jYLwBJyhG7LRKF9Uk8ygtPfvtoeJJ5oPBzb2-VBEHscepi4SVw6DnVmtA9EZj_5y2NriicXuf3TybmF3yikZKC-18-NyHo08IXKDrYmVcnTqCTKfCN7eC6W0UtoYU9GrSlMTpPrefIqkV-9KglQCtU2d-Glj5gcPtgP5-_Ykv8UYCO9AN2Q1sX4GFjxeWFL5_fw3-DobNazJj-i3dPjyS5CsNWGYDwxyGBxchpMIocuXArKxWdDzEK8t8E"
+          />
+        </div> -->
+      </div>
+    </header>
+    <!-- NavigationDrawer (Desktop) -->
+    <nav
+      class="hidden lg:flex flex-col h-screen py-md w-72 fixed left-0 top-0 bg-surface border-r border-outline-variant z-40"
+    >
+      <div class="px-6 mb-8 mt-16">
+        <div
+          class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-low"
+        >
+          <div
+            class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container"
+          >
+            <span class="material-symbols-outlined" data-icon="person"
+              >person</span
+            >
+          </div>
+          <div>
+            <h3 class="font-headline-sm text-headline-sm text-primary">
+              Exam Candidate
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant">
+              Student Account
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 flex-grow">
+        <!-- Active: Dashboard -->
+        <a
+          class="bg-primary-container text-on-primary-container rounded-full mx-2 flex items-center gap-4 px-4 py-3 cursor-pointer active:opacity-80 transition-all"
+          href="/student-dashboard"
+        >
+          <span class="material-symbols-outlined" data-icon="dashboard"
+            >dashboard</span
+          >
+          <span class="font-label-md text-label-md">Dashboard</span>
+        </a>
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all"
+          href="/exam-setup"
+        >
+          <span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+          <span class="font-label-md text-label-md">Exams</span>
+        </a>
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all"
+          href="/exam-result"
+        >
+          <span class="material-symbols-outlined" data-icon="analytics"
+            >analytics</span
+          >
+          <span class="font-label-md text-label-md">Reports</span>
+        </a>
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all"
+          href="/ai-academic"
+        >
+          <span class="material-symbols-outlined" data-icon="psychology"
+            >psychology</span
+          >
+          <span class="font-label-md text-label-md">AI Tutor</span>
+        </a>
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all mt-auto"
+          href="/"
+        >
+          <span class="material-symbols-outlined" data-icon="settings"
+            >settings</span
+          >
+          <span class="font-label-md text-label-md">Logout</span>
+        </a>
+      </div>
+    </nav>
+    <!-- Main Content Canvas -->
+    <main class="mt-16 p-md lg:p-lg max-w-container-max mx-auto">
+      <!-- Welcome Header -->
+      <section class="mb-lg">
+        <h2 class="font-display-lg text-display-lg text-on-surface mb-2">
+          Welcome to Dee-Perfect Class International Secondary School
+        </h2>
+        <p class="font-body-lg text-body-lg text-on-surface-variant">
+          Ready to excel? Your next session is waiting.
+        </p>
+      </section>
+      <!-- Bento Grid Dashboard -->
+      <div class="bento-grid">
+        <!-- Primary Actions Card -->
+        <div
+          class="col-span-12 md:col-span-8 bg-surface-container-lowest p-md border border-outline-variant shadow-sm rounded-xl flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden"
+        >
+          <div class="z-10">
+            <h3 class="font-headline-md text-headline-md text-primary mb-2">
+              Start Your Journey
+            </h3>
+            <p
+              class="font-body-md text-body-md text-on-surface-variant mb-6 max-w-md"
+            >
+              Launch a new computer-based testing session now. We have prepared
+              mock exams for your current class.
+            </p>
+            <div class="flex gap-4">
+              <button
+                id="start-exam-btn"
+                class="bg-primary text-on-primary px-6 py-3 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-md"
+              >
+                Start New Exam
+              </button>
+              <button
+                id="view-results-btn"
+                class="border border-primary text-primary px-6 py-3 rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors"
+              >
+                View Past Results
+              </button>
+            </div>
+          </div>
+          <!-- Decorative element -->
+          <div
+            class="hidden md:block w-48 h-48 bg-tertiary-fixed rounded-full opacity-20 absolute -right-12 -top-12 blur-3xl"
+          ></div>
+          <div
+            class="w-full md:w-1/3 aspect-video rounded-lg overflow-hidden border border-outline-variant"
+          >
+            <img
+              alt="Dee-Perfect Class International Secondary School crest"
+              class="w-full h-full object-contain bg-white p-2"
+              src="img/logo.png"
+            />
+          </div>
+        </div>
+        <!-- Stats Card 1: Exams Taken -->
+        <div
+          class="col-span-12 md:col-span-4 lg:col-span-4 bg-primary p-md rounded-xl text-on-primary flex flex-col justify-between hover-lift"
+        >
+          <div class="flex justify-between items-start">
+            <span
+              class="material-symbols-outlined text-tertiary-fixed text-4xl"
+              data-icon="history_edu"
+              >history_edu</span
+            >
+            <span
+              class="font-label-sm text-label-sm bg-white/10 px-2 py-1 rounded"
+              >Last 30 Days</span
+            >
+          </div>
+          <div>
+            <p id="stat-exams-count" class="font-display-lg text-display-lg">0</p>
+            <p class="font-label-md text-label-md text-primary-fixed-dim">
+              Exams Taken
+            </p>
+          </div>
+        </div>
+        <!-- Stats Card 2: Avg Score -->
+        <div
+          class="col-span-12 md:col-span-6 lg:col-span-4 bg-surface-container-lowest border border-outline-variant p-md rounded-xl flex flex-col justify-between hover-lift"
+        >
+          <div class="flex justify-between items-start">
+            <div class="p-2 bg-on-tertiary-container/10 rounded-lg">
+              <span
+                class="material-symbols-outlined text-on-tertiary-container"
+                data-icon="trending_up"
+                >trending_up</span
+              >
+            </div>
+            <span id="stat-trend" class="text-on-tertiary-container font-label-sm"></span>
+          </div>
+          <div class="mt-4">
+            <p id="stat-avg-score" class="font-display-lg text-display-lg text-on-surface">--</p>
+            <p class="font-label-md text-label-md text-on-surface-variant">
+              Average Score
+            </p>
+            <div
+              class="w-full h-2 bg-surface-container mt-4 rounded-full overflow-hidden"
+            >
+              <div
+                id="stat-avg-bar"
+                class="h-full bg-on-tertiary-container"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <!-- Stats Card 3: Current Subject -->
+        <div
+          class="col-span-12 md:col-span-6 lg:col-span-4 bg-surface-container-lowest border border-outline-variant p-md rounded-xl flex flex-col justify-between hover-lift"
+        >
+          <div class="flex items-center gap-3 mb-4">
+            <div class="p-2 bg-primary/10 rounded-lg">
+              <span
+                class="material-symbols-outlined text-primary"
+                data-icon="menu_book"
+                >menu_book</span
+              >
+            </div>
+            <h4 class="font-label-md text-label-md text-on-surface">
+              Current Subject
+            </h4>
+          </div>
+          <div>
+            <p class="font-headline-md text-headline-md text-primary">
+              Mathematics
+            </p>
+            <p class="font-body-md text-body-md text-on-surface-variant">
+              Topic: Quadratic Equations
+            </p>
+          </div>
+          <div class="mt-4 flex items-center gap-2">
+            <div class="flex -space-x-2">
+              <div
+                class="w-8 h-8 rounded-full border-2 border-surface bg-slate-200"
+              ></div>
+              <div
+                class="w-8 h-8 rounded-full border-2 border-surface bg-slate-300"
+              ></div>
+              <div
+                class="w-8 h-8 rounded-full border-2 border-surface bg-slate-400"
+              ></div>
+            </div>
+            <span class="font-label-sm text-label-sm text-on-surface-variant"
+              >12 students online</span
+            >
+          </div>
+        </div>
+        <!-- Recent Activity Table / Bento Cell -->
+        <!-- im coming here if it no work -->
+        <div
+          id="recent-performance-body"
+          class="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden"
+        >
+          <div
+            class="px-md py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low"
+          >
+            <!-- the id name recent-performance-body suppose dey here -->
+            <h3 class="font-headline-sm text-headline-sm text-primary">
+              Recent Performance
+            </h3>
+            <button
+              id="view-all-btn"
+              class="text-primary font-label-md text-label-md flex items-center gap-1"
+            >
+              View All
+              <span
+                class="material-symbols-outlined text-sm"
+                data-icon="chevron_right"
+                >chevron_right</span
+              >
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="text-left bg-surface-container-lowest">
+                  <th
+                    class="px-md py-4 font-label-sm text-label-sm text-on-surface-variant"
+                  >
+                    Exam Name
+                  </th>
+                  <th
+                    class="px-md py-4 font-label-sm text-label-sm text-on-surface-variant"
+                  >
+                    Date
+                  </th>
+                  <th
+                    class="px-md py-4 font-label-sm text-label-sm text-on-surface-variant"
+                  >
+                    Score
+                  </th>
+                  <th
+                    class="px-md py-4 font-label-sm text-label-sm text-on-surface-variant"
+                  >
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="recent-results-tbody" class="divide-y divide-outline-variant">
+                <tr>
+                  <td colspan="4" class="px-md py-8 text-center text-on-surface-variant">
+                    No exams taken yet
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Mini Calendar / Schedule Bento Cell -->
+        <div
+          class="col-span-12 lg:col-span-4 bg-surface-container-lowest border border-outline-variant p-md rounded-xl"
+        >
+          <h3 class="font-headline-sm text-headline-sm text-primary mb-4">
+            Upcoming Schedule
+          </h3>
+          <div class="space-y-4">
+            <div
+              class="flex items-center gap-4 p-3 border border-outline-variant rounded-lg bg-surface-bright"
+            >
+              <div
+                class="flex flex-col items-center justify-center bg-tertiary-fixed text-on-tertiary-fixed w-12 h-12 rounded"
+              >
+                <span class="font-bold text-lg">26</span>
+                <span class="text-[10px] uppercase font-bold">OCT</span>
+              </div>
+              <div>
+                <p class="font-label-md text-label-md text-on-surface">
+                  Basic Science Quiz
+                </p>
+                <p class="font-label-sm text-label-sm text-on-surface-variant">
+                  10:00 AM - 11:30 AM
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-4 p-3 border border-outline-variant rounded-lg bg-surface-bright"
+            >
+              <div
+                class="flex flex-col items-center justify-center bg-primary-fixed text-on-primary-fixed w-12 h-12 rounded"
+              >
+                <span class="font-bold text-lg">28</span>
+                <span class="text-[10px] uppercase font-bold">OCT</span>
+              </div>
+              <div>
+                <p class="font-label-md text-label-md text-on-surface">
+                  Mathematics Mid-Term Test
+                </p>
+                <p class="font-label-sm text-label-sm text-on-surface-variant">
+                  02:00 PM - 05:00 PM
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-4 p-3 border border-outline-variant rounded-lg bg-surface-bright"
+            >
+              <div
+                class="flex flex-col items-center justify-center bg-secondary-fixed text-on-secondary-fixed w-12 h-12 rounded"
+              >
+                <span class="font-bold text-lg">31</span>
+                <span class="text-[10px] uppercase font-bold">OCT</span>
+              </div>
+              <div>
+                <p class="font-label-md text-label-md text-on-surface">
+                  English Language Review
+                </p>
+                <p class="font-label-sm text-label-sm text-on-surface-variant">
+                  Online Session
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Floating AI Tutor Button -->
+    <button
+      class="fixed bottom-20 right-6 lg:bottom-10 lg:right-10 w-16 h-16 bg-primary-container rounded-full shadow-2xl flex items-center justify-center border-4 border-white z-50 hover:scale-110 active:scale-90 transition-transform duration-200"
+      id="ai-tutor-fab"
+    >
+      <a href="/ai-academic">
+        <img alt="AI Tutor" class="w-10 h-10 object-contain" src="img/Ai.png"
+      /></a>
+      <div
+        class="absolute -top-1 -right-1 w-5 h-5 bg-tertiary-fixed-dim rounded-full border-2 border-white flex items-center justify-center"
+      >
+        <span
+          class="w-2 h-2 bg-on-tertiary-container rounded-full animate-pulse"
+        ></span>
+      </div>
+    </button>
+    <!-- BottomNavBar (Mobile) -->
+    <nav
+      class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 pb-safe bg-surface-container-lowest border-t border-outline-variant shadow-lg rounded-t-xl"
+    >
+      <a
+        class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:scale-90 transition-transform"
+        href="/student-dashboard"
+      >
+        <span class="material-symbols-outlined" data-icon="home">home</span>
+        <span class="font-label-sm text-label-sm">Home</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-90 transition-transform"
+        href="/exam-setup"
+      >
+        <span class="material-symbols-outlined" data-icon="assignment"
+          >assignment</span
+        >
+        <span class="font-label-sm text-label-sm">Exam</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-90 transition-transform"
+        href="/ai-academic"
+      >
+        <span class="material-symbols-outlined" data-icon="smart_toy"
+          >smart_toy</span
+        >
+        <span class="font-label-sm text-label-sm">AI Chat</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-90 transition-transform"
+        href="/register"
+      >
+        <span class="material-symbols-outlined" data-icon="person">person</span>
+        <span class="font-label-sm text-label-sm">Logout</span>
+      </a>
+    </nav>
+    <!-- Micro-interaction Script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const fab = document.getElementById("ai-tutor-fab");
+
+        // Subtle pulse interaction on load
+        setTimeout(() => {
+          fab.classList.add("animate-bounce");
+          setTimeout(() => fab.classList.remove("animate-bounce"), 2000);
+        }, 1000);
+
+        // Mock interaction for cards
+        const cards = document.querySelectorAll(".hover-lift");
+        cards.forEach((card) => {
+          card.addEventListener("mouseenter", () => {
+            // Logic for card hover effects could go here
+          });
+        });
+      });
+    </script>
+    <script src="./scripts/supabase.min.js"></script>
+    <script src="./scripts/site.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const escapeHtml = (str) =>
+          String(str ?? "").replace(
+            /[&<>"']/g,
+            (c) =>
+              ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+          );
+
+        const percentOf = (r) =>
+          r.total && Number(r.total) > 0
+            ? (Number(r.score) / Number(r.total)) * 100
+            : Number(r.score) || 0;
+
+        // Popup message (inline styles so it always shows)
+        function showToast(message) {
+          const old = document.getElementById("dash-toast");
+          if (old) old.remove();
+          const t = document.createElement("div");
+          t.id = "dash-toast";
+          t.textContent = message;
+          t.style.cssText =
+            "position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9999;background:#2e303a;color:#fff;padding:12px 24px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.25);font-size:14px;font-weight:500;max-width:90%;text-align:center;";
+          document.body.appendChild(t);
+          setTimeout(() => t.remove(), 3500);
+        }
+
+        const tbody = document.getElementById("recent-results-tbody");
+        const viewBtn = document.getElementById("view-results-btn");
+        const viewAllBtn = document.getElementById("view-all-btn");
+        const startExamBtn = document.getElementById("start-exam-btn");
+
+        // null = still loading, [] = no exams, [..] = student's results
+        let myResults = null;
+        let loadFailed = false;
+
+        // ===============================
+        // BUTTONS - attached immediately (do not wait for Supabase)
+        // ===============================
+        if (startExamBtn) {
+          startExamBtn.addEventListener("click", () => {
+            window.location.href = "exam-setup.html";
+          });
+        }
+
+        function handleResultsClick(target) {
+          if (loadFailed) {
+            showToast("Could not load your results. Please refresh the page.");
+            return;
+          }
+          if (myResults === null) {
+            showToast("Still loading your results, try again in a moment.");
+            return;
+          }
+          if (myResults.length === 0) {
+            showToast("You have not taken any exam yet.");
+            return;
+          }
+          window.location.href = target(myResults);
+        }
+
+        if (viewBtn) {
+          viewBtn.addEventListener("click", () =>
+            handleResultsClick((r) => `exam-result.html?id=${r[0].id}`),
+          );
+        }
+        if (viewAllBtn) {
+          viewAllBtn.addEventListener("click", () =>
+            handleResultsClick(() => "exam-result.html"),
+          );
+        }
+
+        // ===============================
+        // RENDER HELPERS
+        // ===============================
+        function renderEmpty(message) {
+          if (!tbody) return;
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="4" class="px-md py-8 text-center text-on-surface-variant">
+                ${message}
+              </td>
+            </tr>`;
+        }
+
+        function renderStats(results) {
+          const countEl = document.getElementById("stat-exams-count");
+          const avgEl = document.getElementById("stat-avg-score");
+          const barEl = document.getElementById("stat-avg-bar");
+          const trendEl = document.getElementById("stat-trend");
+          if (!countEl || !avgEl || !barEl || !trendEl) return;
+
+          const DAY = 24 * 60 * 60 * 1000;
+          const now = Date.now();
+          const last30 = results.filter(
+            (r) => now - new Date(r.created_at).getTime() <= 30 * DAY,
+          );
+          const prev30 = results.filter((r) => {
+            const age = now - new Date(r.created_at).getTime();
+            return age > 30 * DAY && age <= 60 * DAY;
+          });
+          const avg = (list) =>
+            list.reduce((sum, r) => sum + percentOf(r), 0) / list.length;
+
+          countEl.textContent = last30.length;
+
+          if (results.length === 0) {
+            avgEl.textContent = "--";
+            barEl.style.width = "0%";
+            trendEl.textContent = "";
+            return;
+          }
+
+          const overall = Math.round(avg(results));
+          avgEl.textContent = overall + "%";
+          barEl.style.width = Math.min(overall, 100) + "%";
+
+          if (last30.length && prev30.length) {
+            const diff = Math.round(avg(last30) - avg(prev30));
+            trendEl.textContent =
+              (diff >= 0 ? "+" : "") + diff + "% vs last month";
+          } else {
+            trendEl.textContent = "";
+          }
+        }
+
+        function renderRecent(results) {
+          if (results.length === 0) {
+            renderEmpty("No exams taken yet");
+            return;
+          }
+
+          tbody.innerHTML = results
+            .slice(0, 5)
+            .map((r) => {
+              const passed = percentOf(r) >= 50;
+              const statusLabel = r.status || (passed ? "PASSED" : "FAILED");
+              const statusClass = passed
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800";
+              return `
+                <tr class="hover:bg-surface-container transition-colors cursor-pointer dashboard-item" data-id="${escapeHtml(r.id)}">
+                  <td class="px-md py-4 font-body-md text-body-md">${escapeHtml(r.exam_name || "Unknown Exam")}</td>
+                  <td class="px-md py-4 font-body-md text-body-md">${new Date(r.created_at).toLocaleDateString()}</td>
+                  <td class="px-md py-4 font-label-md text-label-md font-bold">${escapeHtml(r.score)}/${escapeHtml(r.total || 0)}</td>
+                  <td class="px-md py-4">
+                    <span class="${statusClass} px-3 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">${escapeHtml(statusLabel)}</span>
+                  </td>
+                </tr>`;
+            })
+            .join("");
+
+          tbody.querySelectorAll(".dashboard-item").forEach((row) => {
+            row.addEventListener("click", () => {
+              window.location.href = `exam-result.html?id=${row.dataset.id}`;
+            });
+          });
+        }
+
+        // ===============================
+        // LOAD THIS STUDENT'S RESULTS
+        // ===============================
+        async function initializeDashboard(supabase) {
+          try {
+            const {
+              data: { user },
+              error: authError,
+            } = await supabase.auth.getUser();
+
+            if (authError || !user) {
+              window.location.href = "register.html";
+              return;
+            }
+
+            const { data, error } = await supabase
+              .from("results")
+              .select("*")
+              .eq("user_id", user.id)
+              .order("created_at", { ascending: false });
+
+            if (error) throw error;
+
+            // only exams the student really attempted (ignore old empty 0-score rows)
+            myResults = (data || []).filter((r) => Number(r.score) > 0);
+            renderStats(myResults);
+            renderRecent(myResults);
+          } catch (err) {
+            console.error("Dashboard load error:", err);
+            loadFailed = true;
+            renderEmpty("Could not load your results. Please refresh.");
+          }
+        }
+
+        // wait for the supabase client from site.js (give up after 10s)
+        const getClient = () =>
+          window.supabaseClient ||
+          (typeof supabaseClient !== "undefined" ? supabaseClient : null);
+        let waited = 0;
+        function waitForSupabase() {
+          const client = getClient();
+          if (client) {
+            initializeDashboard(client);
+            return;
+          }
+          waited += 100;
+          if (waited >= 10000) {
+            console.error(
+              "Supabase client was never created. Check scripts/site.js and scripts/supabase.min.js paths.",
+            );
+            loadFailed = true;
+            renderEmpty("Could not connect. Please refresh the page.");
+            return;
+          }
+          setTimeout(waitForSupabase, 100);
+        }
+        waitForSupabase();
+      });
+    </script>
+
+    
+  </body>
+</html>

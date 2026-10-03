@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Examination | Dee-Perfect Class International Secondary School</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="./img/logo.png" />
+
+    <script src="./scripts/supabase.min.js"></script>
+    <script src="./scripts/schools.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #e3e4ee;
+        color: white;
+        margin: 0;
+        padding: 0;
+      }
+
+      .header {
+        background: #14185f;
+        padding: 15px;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        border-bottom: 3px solid #1fa3e6;
+      }
+
+      .header img {
+        height: 40px;
+        width: 40px;
+        object-fit: contain;
+        background: #fff;
+        border-radius: 50%;
+        padding: 2px;
+      }
+
+      .timer-bar {
+        text-align: center;
+        padding: 10px;
+        background: #2d3394;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+      }
+
+      .card {
+        background: #14185f;
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      .question {
+        font-size: 18px;
+        margin-bottom: 15px;
+      }
+
+      .option {
+        display: block;
+        background: #2d3394;
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .option:hover {
+        background: #3a40b0;
+      }
+
+      input[type="radio"] {
+        margin-right: 10px;
+      }
+
+      .nav-grid {
+        margin-bottom: 15px;
+      }
+
+      .nav-grid button {
+        padding: 6px 10px;
+        margin: 3px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .candidate-card {
+        background: #14185f;
+        padding: 16px;
+        border-radius: 10px;
+        margin-bottom: 16px;
+        border: 1px solid #1fa3e6;
+      }
+
+      .button-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+
+      .btn-primary,
+      .btn-secondary,
+      button {
+        padding: 10px 15px;
+        margin: 0;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        background: #2d3394;
+        color: white;
+      }
+
+      .btn-secondary {
+        background: #757689;
+      }
+
+      button:hover,
+      .btn-primary:hover,
+      .btn-secondary:hover {
+        opacity: 0.85;
+      }
+
+      .review-box {
+        background: #2d3394;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 6px;
+      }
+
+      .review-box {
+        background: #2d3394;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 6px;
+      }
+      /* Controls layout: space buttons to avoid accidental clicks */
+      .controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        width: 100%;
+        margin-top: 8px;
+      }
+
+      .controls button {
+        padding: 10px 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        color: white;
+        background: #757689;
+      }
+
+      .controls button.next {
+        background: #0f8fd6;
+      }
+
+      .controls button.submit {
+        margin-left: auto; /* push submit to the far right */
+        background: #ba1a1a;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="header">
+      <img src="img/logo.png" alt="School logo" />
+      <span>DEE-PERFECT CLASS INTERNATIONAL SECONDARY SCHOOL</span>
+    </div>
+    <div class="timer-bar">
+      ⏱ Exam Time Left: <span id="examTimer">--</span>
+    </div>
+
+    <div class="container">
+      <div class="candidate-card">
+        <p style="margin: 0 0 8px 0; font-weight: 700">DEE-PERFECT CLASS CBT</p>
+        <p style="margin: 0 0 4px 0">
+          Candidate: <span id="candidate-name">Loading...</span>
+        </p>
+        <p style="margin: 0">
+          Email: <span id="candidate-email">Loading...</span>
+        </p>
+      </div>
+      <div id="questions-container" class="card">Loading questions...</div>
+      <div class="button-row">
+        <button class="btn-secondary" onclick="logout()">Logout</button>
+        <button class="btn-primary" onclick="downloadResultPdf()">
+          Download Result in PDF
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let currentQuestionIndex = 0;
+      let userAnswers = {};
+      let timerInterval;
+      let examTimerInterval;
+      let timeLeft = 60;
+      let examTime = 1800;
+      let allQuestions = [];
+      let dbClient = null;
+      let examDataGlobal = null;
+      let examSubmitted = false;
+      let answerKeyGlobal = null;
+
+      function getExamAnswerKey(examData) {
+        return `cbt_${examData.subject}_${examData.year}_${examData.category || ""}_${examData.type || ""}`;
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        const examData = JSON.parse(localStorage.getItem("examData"));
+
+        if (!examData) {
+          alert("No exam selected");
+          window.location.href = "exam-setup.html";
+          return;
+        }
+
+        examDataGlobal = examData;
+        answerKeyGlobal = getExamAnswerKey(examDataGlobal);
+        userAnswers = JSON.parse(localStorage.getItem(answerKeyGlobal) || "{}");
+
+        dbClient = supabase.createClient(
+          "https://bjfhmvvupkapplnbrukz.supabase.co",
+          "sb_publishable_RxNzh9HL5UPhazJDk6BL9w_aJtZLBAP",
+        );
+        // i put suppase code for each school
+        const school = await getCurrentSchool(dbClient);
+
+        if (!school) {
+          alert("This CBT is not registered to a school.");
+          return;
+        }
+
+        console.log("================================");
+        console.log("SCHOOL:", school.school_name);
+        console.log("SCHOOL ID:", school.id);
+        console.log("DOMAIN:", school.domain);
+        console.log("================================");
+
+        window.supabaseClient = dbClient;
+        await loadCandidateInfo();
+
+        const subject = examDataGlobal.subject;
+        const category = examDataGlobal.category;
+        const year = examDataGlobal.year;
+
+        const queryCategory = normalizeCategory(category);
+        const querySubject = normalizeString(subject);
+        const queryYear = parseInt(year, 10) || String(year).trim();
+
+        // Subject -> category map (normalized keys)
+        const subjectCategoryMap = {
+          biology: "science",
+          chemistry: "science",
+          physics: "science",
+          mathematics: "science",
+          agriculture: "science",
+          "computer studies": "science",
+          geography: "science",
+          "home economics": "science",
+          phe: "science",
+
+          accounts: "commercial",
+          commerce: "commercial",
+          economics: "commercial",
+
+          english: "art",
+          "english language": "art",
+          literature: "art",
+          government: "art",
+          history: "art",
+          crk: "art",
+          irk: "art",
+          hausa: "art",
+          yoruba: "art",
+          igbo: "art",
+          french: "art",
+          arabic: "art",
+          music: "art",
+          "fine art": "art",
+        };
+
+        const coreSubjects = ["mathematics", "english language", "economics"];
+        const isCoreSubject = coreSubjects.includes(querySubject);
+
+        // When a subject is mapped to a category we will sample across years (do not filter by year).
+        const mappedCategory = subjectCategoryMap[querySubject] || null;
+        const sampleAcrossYears = !!mappedCategory;
+
+        let queryBuilder = dbClient
+          .from("questions")
+          .select("*")
+          .ilike("subject", `%${querySubject}%`);
+
+        if (!isCoreSubject) {
+          // prefer the mapped category when available, otherwise use UI category
+          const useCategory = mappedCategory || queryCategory;
+          queryBuilder = queryBuilder.ilike("category", `%${useCategory}%`);
+        }
+
+        // Only restrict by year when not sampling across years
+        if (!sampleAcrossYears) {
+          queryBuilder = queryBuilder.eq("year", queryYear);
+        }
+
+        const { data, error } = await queryBuilder;
+
+        if (error) {
+          console.error("Failed to load questions:", error);
+          document.getElementById("questions-container").innerHTML =
+            "<p>Could not load questions. Please try again later.</p>";
+          return;
+        }
+
+        let filtered = Array.isArray(data) ? data : [];
+        if (filtered.length === 0) {
+          console.log(
+            "Fallback searching all questions for",
+            querySubject,
+            queryCategory,
+            queryYear,
+          );
+          const { data: allData, error: allError } = await dbClient
+            .from("questions")
+            .select("*");
+          if (allError) {
+            console.error("Failed to load fallback questions:", allError);
+            document.getElementById("questions-container").innerHTML =
+              "<p>Could not load questions. Please try again later.</p>";
+            return;
+          }
+          filtered = (Array.isArray(allData) ? allData : []).filter((q) => {
+            const qSubject = normalizeString(q.subject || q.Subject || "");
+            const qCategory = normalizeCategory(q.category || q.Category || "");
+            const qYear = String(q.year || q.Year || "").trim();
+
+            // If core subject, require subject and year
+            if (isCoreSubject) {
+              return qSubject === querySubject && qYear === String(year).trim();
+            }
+
+            // If we are sampling across years for this subject, ignore qYear
+            if (sampleAcrossYears) {
+              return (
+                qSubject === querySubject &&
+                qCategory === (mappedCategory || queryCategory)
+              );
+            }
+
+            // Default: require subject, category and year
+            return (
+              qSubject === querySubject &&
+              qCategory === queryCategory &&
+              qYear === String(year).trim()
+            );
+          });
+        }
+
+        if (filtered.length === 0) {
+          document.getElementById("questions-container").innerHTML =
+            "<p>No questions found for the selected subject, category, and year.</p>";
+          return;
+        }
+
+        const sampled = shuffleArray(filtered).slice(0, 60);
+        allQuestions = sampled.map((q) => ({
+          ...q,
+          correct_answer: normalizeAnswer(q),
+        }));
+
+        renderQuestion();
+        startExamTimer();
+
+        setInterval(() => {
+          if (answerKeyGlobal) {
+            localStorage.setItem(answerKeyGlobal, JSON.stringify(userAnswers));
+          }
+        }, 5000);
+      });
+
+      function normalizeAnswer(q) {
+        const val = String(q.correct_answer || "")
+          .trim()
+          .toUpperCase();
+        if (["A", "B", "C", "D"].includes(val)) return val;
+
+        if (q.correct_answer === q.option_a) return "A";
+        if (q.correct_answer === q.option_b) return "B";
+        if (q.correct_answer === q.option_c) return "C";
+        if (q.correct_answer === q.option_d) return "D";
+
+        return "";
+      }
+
+      function shuffleArray(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function normalizeString(value) {
+        return String(value || "")
+          .trim()
+          .toLowerCase();
+      }
+
+      function normalizeCategory(value) {
+        const normalized = normalizeString(value);
+        if (normalized === "art") return "arts";
+        if (normalized === "arts") return "arts";
+        return normalized;
+      }
+
+      function decodeJwt(token) {
+        try {
+          const payload = token.split(".")[1];
+          const json = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
+          return JSON.parse(decodeURIComponent(escape(json)));
+        } catch (error) {
+          return null;
+        }
+      }
+
+      async function loadCandidateInfo() {
+        const nameEl = document.getElementById("candidate-name");
+        const emailEl = document.getElementById("candidate-email");
+        let candidateName = "Unknown Candidate";
+        let candidateEmail = "Not signed in";
+
+        try {
+          if (dbClient?.auth?.getUser) {
+            const { data, error } = await dbClient.auth.getUser();
+            if (!error && data?.user) {
+              candidateEmail = data.user.email || candidateEmail;
+              candidateName =
+                data.user.user_metadata?.full_name ||
+                data.user.user_metadata?.name ||
+                candidateEmail ||
+                candidateName;
+            }
+          }
+        } catch (err) {
+          console.warn("Unable to load auth user:", err);
+        }
+
+        if (candidateEmail === "Not signed in") {
+          const token = localStorage.getItem("supabase_access_token");
+          const decoded = token ? decodeJwt(token) : null;
+          if (decoded) {
+            candidateEmail =
+              decoded.email || decoded.user?.email || candidateEmail;
+            candidateName =
+              decoded.user?.user_metadata?.full_name ||
+              decoded.user?.user_metadata?.name ||
+              decoded.full_name ||
+              decoded.name ||
+              candidateName;
+          }
+        }
+
+        if (candidateEmail === "Not signed in") {
+          const storedName = localStorage.getItem("candidateName");
+          const storedEmail = localStorage.getItem("candidateEmail");
+          if (storedName) candidateName = storedName;
+          if (storedEmail) candidateEmail = storedEmail;
+        }
+
+        nameEl.textContent = candidateName;
+        emailEl.textContent = candidateEmail;
+      }
+
+      function logout() {
+        localStorage.removeItem("supabase_access_token");
+        localStorage.removeItem("candidateName");
+        localStorage.removeItem("candidateEmail");
+        window.location.href = "index.html";
+      }
+
+      function getPdfReviewLines() {
+        const lines = [];
+        lines.push("DEE-PERFECT CLASS INTERNATIONAL SECONDARY SCHOOL");
+        lines.push(
+          "Candidate: " + document.getElementById("candidate-name").textContent,
+        );
+        lines.push(
+          "Email: " + document.getElementById("candidate-email").textContent,
+        );
+        lines.push(
+          "Exam: " +
+            `${examDataGlobal?.type || "-"} ${examDataGlobal?.year || ""} ${examDataGlobal?.category || ""} ${examDataGlobal?.subject || ""}`.trim(),
+        );
+        lines.push(" ");
+
+        allQuestions.forEach((q, index) => {
+          const answer = String(userAnswers[index] || "").toUpperCase();
+          const answerText = answer
+            ? q[`option_${answer.toLowerCase()}`] || "Unknown"
+            : "Not answered";
+          const correctLetter = q.correct_answer || normalizeAnswer(q) || "?";
+          const correctText =
+            q[`option_${correctLetter.toLowerCase()}`] || "Unknown";
+          const status = answer === correctLetter ? "Correct" : "Incorrect";
+
+          lines.push(`Q${index + 1}: ${q.question_text}`);
+          lines.push(`Answered: ${answer || "Not answered"} — ${answerText}`);
+          lines.push(`Correct: ${correctLetter} — ${correctText}`);
+          lines.push(`Status: ${answer ? status : "Unanswered"}`);
+          lines.push(" ");
+        });
+
+        return lines;
+      }
+
+      function downloadResultPdf() {
+        const jsPDF =
+          window.jspdf?.jsPDF || window.jspdf || window.jspdf?.default;
+        if (!jsPDF) {
+          alert("PDF export is unavailable right now.");
+          return;
+        }
+
+        const doc = new jsPDF({ unit: "pt", format: "letter" });
+        const lines = getPdfReviewLines();
+        let y = 40;
+        doc.setFontSize(14);
+        doc.text("DEE-PERFECT CLASS INTERNATIONAL SECONDARY SCHOOL", 40, y);
+        y += 24;
+        doc.setFontSize(11);
+        lines.slice(1).forEach((line) => {
+          if (y > 740) {
+            doc.addPage();
+            y = 40;
+          }
+          doc.text(line, 40, y);
+          y += 18;
+        });
+
+        doc.save(
+          "Dee-Perfect Class Exam Result.pdf",
+        );
+      }
+
+      function renderNavGrid() {
+        return `
+    <div class="nav-grid">
+      ${allQuestions
+        .map((_, i) => {
+          const bg = userAnswers[i] ? "#0f8fd6" : "#3a40b0";
+          return `<button style="background:${bg}" onclick="goTo(${i})">${i + 1}</button>`;
+        })
+        .join("")}
+    </div>
+  `;
+      }
+
+      function renderQuestion() {
+        const q = allQuestions[currentQuestionIndex];
+
+        document.getElementById("questions-container").innerHTML = `
+    ${renderNavGrid()}
+
+    <div class="question">
+      <b>Q${currentQuestionIndex + 1}:</b> ${q.question_text}
+    </div>
+
+    ${renderOption("A", q.option_a)}
+    ${renderOption("B", q.option_b)}
+    ${renderOption("C", q.option_c)}
+    ${renderOption("D", q.option_d)}
+
+    <p>⏱ Question Time: <span id="timer">${timeLeft}</span>s</p>
+
+    <div class="controls">
+      <button class="prev" onclick="prev()">⬅ Prev</button>
+      <button class="next" onclick="next()">Next ➡</button>
+      <button class="submit" onclick="submitExam()">Submit</button>
+    </div>
+  `;
+
+        document.querySelectorAll('input[name="opt"]').forEach((el) => {
+          el.checked = false;
+        });
+
+        restore();
+        startTimer();
+      }
+
+      function renderOption(letter, text) {
+        return `
+    <label class="option">
+      <input type="radio" name="opt" value="${letter}">
+      ${letter}. ${text}
+    </label>
+  `;
+      }
+
+      document.addEventListener("change", (e) => {
+        if (e.target.name === "opt") {
+          userAnswers[currentQuestionIndex] = e.target.value;
+          if (answerKeyGlobal) {
+            localStorage.setItem(answerKeyGlobal, JSON.stringify(userAnswers));
+          }
+        }
+      });
+
+      function restore() {
+        const val = String(
+          userAnswers[currentQuestionIndex] || "",
+        ).toUpperCase();
+        if (["A", "B", "C", "D"].includes(val)) {
+          const el = document.querySelector(
+            `input[name="opt"][value="${val}"]`,
+          );
+          if (el) el.checked = true;
+        }
+      }
+
+      function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = 60;
+
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          document.getElementById("timer").textContent = timeLeft;
+
+          if (timeLeft <= 0) next();
+        }, 1000);
+      }
+
+      function startExamTimer() {
+        examTimerInterval = setInterval(() => {
+          examTime--;
+          const m = Math.floor(examTime / 60);
+          const s = examTime % 60;
+          document.getElementById("examTimer").textContent =
+            `${m}:${s < 10 ? "0" : ""}${s}`;
+
+          if (examTime <= 0) submitExam();
+        }, 1000);
+      }
+
+      function next() {
+        clearInterval(timerInterval);
+        if (currentQuestionIndex < allQuestions.length - 1) {
+          currentQuestionIndex++;
+          renderQuestion();
+        } else {
+          submitExam();
+        }
+      }
+
+      function prev() {
+        clearInterval(timerInterval);
+        if (currentQuestionIndex > 0) {
+          currentQuestionIndex--;
+          renderQuestion();
+        }
+      }
+
+      function goTo(i) {
+        clearInterval(timerInterval);
+        currentQuestionIndex = i;
+        renderQuestion();
+      }
+
+      async function submitExam() {
+        clearInterval(timerInterval);
+        clearInterval(examTimerInterval);
+
+        // stop double submit (Submit button + timer, or double click)
+        if (examSubmitted) return;
+        examSubmitted = true;
+
+        // count how many questions the student really answered
+        const answeredCount = allQuestions.filter((q, i) =>
+          ["A", "B", "C", "D"].includes(String(userAnswers[i] || "").toUpperCase()),
+        ).length;
+
+        // student did not attempt this subject -> do NOT save a 0 result
+        if (answeredCount === 0) {
+          document.getElementById("questions-container").innerHTML = `
+            <h2>No questions answered</h2>
+            <p>You did not answer any question, so no result was saved for this subject.</p>
+            <p><a href="student-dashboard.html">Back to dashboard</a> &nbsp;|&nbsp; <a href="exam-setup.html">Start a new exam</a></p>
+          `;
+          try {
+            if (answerKeyGlobal) localStorage.removeItem(answerKeyGlobal);
+            localStorage.removeItem("examData");
+          } catch (e) {}
+          return;
+        }
+
+        let score = 0;
+        let review = "";
+
+        allQuestions.forEach((q, i) => {
+          const user = (userAnswers[i] || "").toUpperCase();
+          const correct = q.correct_answer;
+
+          const userText = q["option_" + user.toLowerCase()] || "No Answer";
+          const correctText = q["option_" + correct.toLowerCase()];
+
+          const ok = user === correct;
+          if (ok) score++;
+
+          review += `
+        <div class="review-box">
+          <p><b>Q${i + 1}:</b> ${q.question_text}</p>
+          <p>Your Answer: <span style="color:${ok ? "#9ef6b6" : "#ffb4ab"}">${userText}</span></p>
+          <p>Correct Answer: <span style="color:#9ef6b6">${correctText}</span></p>
+        </div>
+      `;
+        });
+
+        const percent = Math.round((score / allQuestions.length) * 100);
+
+        document.getElementById("questions-container").innerHTML = `
+    <h2>✅ Exam Submitted</h2>
+    <h3>${score} / ${allQuestions.length}</h3>
+    <h1>${percent}%</h1>
+    <hr>
+    <h3>📊 Review</h3>
+    ${review}
+  `;
+
+        const examName = examDataGlobal
+          ? `${examDataGlobal.subject || ""} ${examDataGlobal.year || ""} ${examDataGlobal.type || ""}`.trim()
+          : "Unknown Exam";
+        const status = percent >= 50 ? "PASSED" : "FAILED";
+
+        try {
+          const targetClient = window.supabaseClient || dbClient;
+          if (!targetClient) {
+            console.error("Supabase client not initialized.");
+          } else {
+            const { data: authData, error: authError } =
+              await targetClient.auth.getUser();
+            if (authError) {
+              console.error("Auth error while getting user:", authError);
+            }
+
+            const userId = authData?.user?.id || null;
+            if (!userId) {
+              console.error(
+                "No authenticated user found when submitting exam.",
+              );
+            }
+
+            const result = {
+              user_id: userId,
+              exam_name: examName,
+              subject: examDataGlobal?.subject || null,
+              exam_year: examDataGlobal?.year ? Number(examDataGlobal.year) : null,
+              score,
+              total: allQuestions.length,
+              status,
+            };
+
+            const { data: insertData, error: insertError } = await targetClient
+              .from("results")
+              .insert([result]);
+            if (insertError) {
+              console.error("Failed to save result to Supabase:", insertError);
+            } else {
+              console.log("Saved exam result to Supabase:", insertData);
+            }
+          }
+        } catch (err) {
+          console.error("Error saving result to Supabase:", err);
+        }
+
+        try {
+          if (answerKeyGlobal) localStorage.removeItem(answerKeyGlobal);
+          localStorage.removeItem("examData");
+        } catch (e) {
+          console.warn("Could not clear exam local storage:", e);
+        }
+      }
+    </script>
+  </body>
+</html>
