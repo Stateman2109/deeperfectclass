@@ -350,11 +350,7 @@
                   </div>
                 </div>
 
-                <!--
-                  The LGA dropdown and the school-name picker were removed (single school).
-                  These hidden fields keep the old element ids in the page so site.js does not
-                  hit a missing element. The school name is fixed to this school.
-                -->
+                <!-- LGA is optional; the active school is resolved from this page's hostname. -->
                 <input type="hidden" id="signup-lga" name="lga" value="" />
                 <input
                   type="hidden"

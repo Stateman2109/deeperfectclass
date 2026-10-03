@@ -17,6 +17,20 @@
 --    those policies.
 -- ============================================================================
 
+-- Public registration and exam pages need to resolve the active portal by
+-- hostname. Expose only the school fields used by those pages.
+grant select (id, school_name, domain, is_active)
+  on public.schools to anon, authenticated;
+
+drop policy if exists "public reads active school portals" on public.schools;
+create policy "public reads active school portals"
+  on public.schools for select
+  to anon, authenticated
+  using (is_active is true);
+
+-- School portals have different registration forms, so LGA is optional.
+alter table public.profiles alter column lga drop not null;
+
 -- 1. Which school does the signed-in admin belong to?
 --    Compared as text so it works whether school_id is uuid or bigint.
 create or replace function public.my_admin_school_id()

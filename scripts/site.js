@@ -9,7 +9,6 @@ var supabaseClient; // var (not let) so it is also available as window.supabaseC
 let supabaseAccessToken = localStorage.getItem("supabase_access_token") || null;
 console.log("site.js loaded");
 
-
 function getSupabaseHeaders(auth = false) {
   const headers = {
     apikey: SUPABASE_ANON_KEY,
@@ -434,8 +433,6 @@ window.addEventListener("offline", () => {
   showNotification("Offline mode enabled. Using cached questions.");
 });
 
-
-
 // Which school portal is this? (looked up from the website address in the
 // public.schools table, the same way schools.js / exam.html does it.)
 // White label: one row per school in public.schools, each with its own domain.
@@ -468,11 +465,21 @@ async function getPortalSchool() {
 //   any other reason  = we could not check (offline, missing client, ...)
 async function verifyPortalAccess(user) {
   if (!supabaseClient) {
-    return { ok: false, reason: "no-client", message: "Cannot verify your account right now. Please refresh and try again." };
+    return {
+      ok: false,
+      reason: "no-client",
+      message:
+        "Cannot verify your account right now. Please refresh and try again.",
+    };
   }
   const portal = await getPortalSchool();
   if (!portal) {
-    return { ok: false, reason: "no-portal", message: "This website is not registered as a school portal. Contact support." };
+    return {
+      ok: false,
+      reason: "no-portal",
+      message:
+        "This website is not registered as a school portal. Contact support.",
+    };
   }
   const { data: profile, error } = await supabaseClient
     .from("profiles")
@@ -481,16 +488,28 @@ async function verifyPortalAccess(user) {
     .maybeSingle();
   if (error) {
     console.warn("Could not read profile for portal check:", error);
-    return { ok: false, reason: "error", message: "Could not verify your account. Please try again." };
+    return {
+      ok: false,
+      reason: "error",
+      message: "Could not verify your account. Please try again.",
+    };
   }
-  if (!profile || profile.school_id == null || String(profile.school_id) !== String(portal.id)) {
+  if (
+    !profile ||
+    profile.school_id == null ||
+    String(profile.school_id) !== String(portal.id)
+  ) {
     return {
       ok: false,
       reason: "mismatch",
       message: `This account is not registered on the ${portal.school_name} website. Please log in on the website you registered with.`,
     };
   }
-  return { ok: true, role: profile.role || user?.user_metadata?.role || "student", portal };
+  return {
+    ok: true,
+    role: profile.role || user?.user_metadata?.role || "student",
+    portal,
+  };
 }
 
 async function signOutEverywhere() {
@@ -509,7 +528,8 @@ async function signOutEverywhere() {
 // running without internet are not interrupted.)
 async function guardPortalSession() {
   const page = window.location.pathname.split("/").pop().toLowerCase();
-  if (["", "index", "index.html", "register", "register.html"].includes(page)) return;
+  if (["", "index", "index.html", "register", "register.html"].includes(page))
+    return;
   if (!supabaseClient?.auth?.getUser || !isOnline()) return;
   try {
     const { data } = await supabaseClient.auth.getUser();
@@ -574,6 +594,10 @@ function attachAuthHandlers() {
       )?.value;
       const classLevel = document.getElementById("signup-class")?.value;
       const schoolType = document.getElementById("signup-school-type")?.value;
+      const lgaField =
+        signupForm.elements.namedItem("lga") ||
+        document.getElementById("signup-lga");
+      const lga = lgaField?.value?.trim() || null;
 
       if (!fullName || !email || !password) {
         showNotification("Please complete all signup fields.", "error");
@@ -621,6 +645,7 @@ function attachAuthHandlers() {
           school_name: portal.school_name,
           class_level: classLevel,
           school_type: schoolType,
+          lga,
         });
         showNotification(
           "Account created. Please verify your email and sign in.",
