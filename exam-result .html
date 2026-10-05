@@ -1,0 +1,722 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Digital Examination Results - Dee-Perfect Class International Secondary School</title>
+    <link rel="icon" type="image/png" href="./img/logo.png" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#e3e4ee",
+              "on-tertiary-container": "#00243a",
+              "on-tertiary-fixed-variant": "#004a70",
+              "surface-bright": "#f8f9ff",
+              "on-secondary-fixed": "#001e2f",
+              "secondary-container": "#c7ebff",
+              tertiary: "#0b7bb5",
+              surface: "#f8f9ff",
+              "secondary-fixed": "#c7ebff",
+              "primary-fixed": "#c9ccff",
+              "on-error": "#ffffff",
+              "on-surface": "#191b24",
+              "inverse-primary": "#9fa5ff",
+              "surface-dim": "#d9dae6",
+              "tertiary-fixed": "#8fdcff",
+              "on-tertiary-fixed": "#001d2e",
+              secondary: "#0f8fd6",
+              primary: "#14185f",
+              "on-primary-container": "#dfe3ff",
+              "primary-fixed-dim": "#9fa5ff",
+              "on-error-container": "#93000a",
+              "secondary-fixed-dim": "#7fcdf5",
+              "error-container": "#ffdad6",
+              "on-secondary-container": "#004a6e",
+              "inverse-on-surface": "#f0f0fa",
+              "on-surface-variant": "#444659",
+              "surface-container": "#ecedf7",
+              "primary-container": "#2d3394",
+              outline: "#757689",
+              error: "#ba1a1a",
+              "surface-tint": "#3a40b0",
+              "on-tertiary": "#ffffff",
+              "tertiary-container": "#35b6f2",
+              "on-background": "#191b24",
+              "on-secondary": "#ffffff",
+              "on-primary": "#ffffff",
+              "outline-variant": "#c5c6dc",
+              "on-primary-fixed-variant": "#2a2f8f",
+              "tertiary-fixed-dim": "#5cc8f7",
+              background: "#f8f9ff",
+              "inverse-surface": "#2e303a",
+              "surface-variant": "#e3e4ee",
+              "on-secondary-fixed-variant": "#004a6e",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed": "#00023f",
+              "surface-container-high": "#e6e7f1",
+              "surface-container-low": "#f1f2fb",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              md: "24px",
+              lg: "40px",
+              gutter: "24px",
+              "container-max": "1280px",
+              xs: "4px",
+              xl: "64px",
+              base: "8px",
+              sm: "12px",
+            },
+            fontFamily: {
+              "label-sm": ["Inter"],
+              "body-md": ["Inter"],
+              "body-lg": ["Inter"],
+              "label-md": ["Inter"],
+              "display-lg": ["Inter"],
+              "headline-sm": ["Inter"],
+              "headline-md": ["Inter"],
+            },
+            fontSize: {
+              "label-sm": ["12px", { lineHeight: "16px", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "20px",
+                  letterSpacing: "0.01em",
+                  fontWeight: "500",
+                },
+              ],
+              "display-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-sm": [
+                "20px",
+                { lineHeight: "28px", fontWeight: "600" },
+              ],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .progress-ring__circle {
+        transition: stroke-dashoffset 0.8s ease-in-out;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+      }
+      .bento-card {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .bento-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.08);
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="bg-surface-bright text-on-surface font-body-md min-h-screen">
+    <!-- TopAppBar -->
+    <header
+      class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-surface-container-lowest shadow-sm border-b border-outline-variant"
+    >
+      <div class="flex items-center gap-3">
+        <img
+          alt="Dee-Perfect Class International Secondary School logo"
+          class="h-9 w-9 md:h-10 md:w-10 object-contain"
+          src="img/logo.png"
+        />
+        <span class="font-headline-md text-headline-md font-bold text-primary"
+          >DEE-PERFECT CLASS
+          <span class="hidden sm:inline text-secondary"
+            >INTERNATIONAL SECONDARY SCHOOL</span
+          ></span
+        >
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="hidden md:flex gap-6 items-center">
+          <a
+            class="text-on-surface-variant font-label-md hover:text-primary transition-colors"
+            href="student-dashboard.html"
+            >Dashboard</a
+          >
+          <a class="text-primary font-bold font-label-md" href="exam-setup.html"
+            >Exams</a
+          >
+          <a
+            class="text-on-surface-variant font-label-md hover:text-primary transition-colors"
+            href="exam-result.html"
+            >Reports</a
+          >
+        </div>
+        <div
+          class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border border-outline-variant"
+        >
+          <img
+            class="w-full h-full object-cover"
+            data-alt="A professional headshot of a student for an academic profile, high-quality photography, studio lighting, clean background, navy blue and white corporate aesthetic."
+            src="img/favicon.png"
+          />
+        </div>
+      </div>
+    </header>
+    <!-- NavigationDrawer (Desktop) -->
+    <aside
+      class="hidden lg:flex flex-col h-screen py-md w-72 fixed left-0 top-0 bg-surface border-r border-outline-variant pt-20"
+    >
+      <div class="px-6 mb-8 flex items-center gap-4">
+        <div
+          class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-primary"
+        >
+          <span class="material-symbols-outlined">person</span>
+        </div>
+        <div>
+          <p id="sidebar-name" class="font-label-md text-on-surface font-bold">
+            Exam Candidate
+          </p>
+          <p id="sidebar-email" class="text-xs text-on-surface-variant">
+            Student Account
+          </p>
+        </div>
+      </div>
+      <nav class="space-y-1">
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all"
+          href="student-dashboard.html"
+        >
+          <span class="material-symbols-outlined">dashboard</span>
+          <span class="font-label-md">Dashboard</span>
+        </a>
+        <a
+          class="bg-primary-container text-on-primary-container rounded-full mx-2 flex items-center gap-4 px-4 py-3 font-bold"
+          href="exam-setup.html"
+        >
+          <span class="material-symbols-outlined">quiz</span>
+          <span class="font-label-md">Exams</span>
+        </a>
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all"
+          href="exam-result.html"
+        >
+          <span class="material-symbols-outlined">analytics</span>
+          <span class="font-label-md">Reports</span>
+        </a>
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all"
+          href="ai-academic.html"
+        >
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >psychology</span
+          >
+          <span class="font-label-md">AI Tutor</span>
+        </a>
+        <a
+          class="text-on-surface-variant mx-2 flex items-center gap-4 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all"
+          href="index.html"
+        >
+          <span class="material-symbols-outlined">settings</span>
+          <span class="font-label-md">Settings</span>
+        </a>
+      </nav>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="lg:ml-72 pt-24 pb-32 px-md lg:px-lg">
+      <div class="max-w-container-max mx-auto">
+        <!-- Result Header -->
+        <div
+          class="mb-8 flex flex-col md:flex-row justify-between items-end gap-4"
+        >
+          <div>
+            <h1 class="font-display-lg text-display-lg text-primary mb-2">
+              Examination Summary
+            </h1>
+            <p id="result-subtitle" class="text-on-surface-variant">
+              Loading your results...
+            </p>
+          </div>
+          <div id="header-actions" class="hidden gap-3">
+            <button
+              id="download-pdf-btn"
+              class="bg-primary text-white px-6 py-2 rounded-lg font-label-md flex items-center gap-2 hover:opacity-90 transition-opacity active:scale-95 duration-75"
+            >
+              <span class="material-symbols-outlined">picture_as_pdf</span>
+              Download PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div
+          id="loading-state"
+          class="bento-card p-12 rounded-xl text-center text-on-surface-variant"
+        >
+          Loading your results...
+        </div>
+
+        <!-- Error -->
+        <div
+          id="error-state"
+          class="hidden bento-card p-12 rounded-xl text-center"
+        >
+          <span class="material-symbols-outlined text-error text-5xl mb-4"
+            >error</span
+          >
+          <h2 class="text-headline-md font-headline-md text-primary mb-2">
+            Could not load your results
+          </h2>
+          <p id="error-message" class="text-on-surface-variant mb-6">
+            Please refresh the page and try again.
+          </p>
+          <button
+            onclick="window.location.reload()"
+            class="bg-primary text-white px-6 py-3 rounded-lg font-label-md"
+          >
+            Refresh
+          </button>
+        </div>
+
+        <!-- Empty: student has not written any CBT yet -->
+        <div
+          id="empty-state"
+          class="hidden bento-card p-12 rounded-xl text-center"
+        >
+          <span class="material-symbols-outlined text-primary text-5xl mb-4"
+            >assignment</span
+          >
+          <h2 class="text-headline-md font-headline-md text-primary mb-2">
+            No results yet
+          </h2>
+          <p class="text-on-surface-variant mb-6">
+            You have not written any CBT yet. Once you finish an exam, your
+            result will show here.
+          </p>
+          <a
+            href="exam-setup.html"
+            class="inline-block bg-primary text-white px-6 py-3 rounded-lg font-label-md hover:opacity-90"
+            >Start New Exam</a
+          >
+        </div>
+
+        <!-- Real result -->
+        <div
+          id="result-content"
+          class="hidden grid grid-cols-1 md:grid-cols-12 gap-6"
+        >
+          <!-- Main Score Display -->
+          <div
+            class="md:col-span-8 bento-card p-8 rounded-xl flex flex-col items-center justify-center text-center relative overflow-hidden"
+          >
+            <div
+              class="absolute -top-10 -right-10 w-40 h-40 bg-primary-fixed opacity-10 rounded-full blur-3xl"
+            ></div>
+            <div
+              class="absolute -bottom-10 -left-10 w-40 h-40 bg-tertiary-fixed opacity-20 rounded-full blur-3xl"
+            ></div>
+            <div class="relative w-48 h-48 mb-6">
+              <svg class="w-full h-full" viewBox="0 0 100 100">
+                <circle
+                  class="text-surface-container"
+                  cx="50"
+                  cy="50"
+                  fill="transparent"
+                  r="42"
+                  stroke="currentColor"
+                  stroke-width="8"
+                ></circle>
+                <circle
+                  id="ring-circle"
+                  class="text-primary progress-ring__circle"
+                  cx="50"
+                  cy="50"
+                  fill="transparent"
+                  r="42"
+                  stroke="currentColor"
+                  stroke-dasharray="263.89"
+                  stroke-dashoffset="263.89"
+                  stroke-linecap="round"
+                  stroke-width="8"
+                ></circle>
+              </svg>
+              <div
+                class="absolute inset-0 flex flex-col items-center justify-center"
+              >
+                <span class="text-5xl font-bold text-primary"
+                  ><span id="score-value">0</span
+                  ><span class="text-2xl text-on-surface-variant"
+                    >/<span id="total-value">0</span></span
+                  ></span
+                >
+                <span
+                  class="text-on-surface-variant font-label-sm uppercase tracking-wider"
+                  >Total Score</span
+                >
+              </div>
+            </div>
+            <div
+              id="status-badge"
+              class="inline-flex items-center px-4 py-2 rounded-full font-bold text-headline-sm mb-4"
+            ></div>
+            <h2
+              id="result-title"
+              class="text-headline-md font-headline-md text-primary mb-2"
+            ></h2>
+            <p id="result-message" class="text-on-surface-variant max-w-md"></p>
+          </div>
+
+          <!-- Result details -->
+          <div
+            class="md:col-span-4 bento-card p-6 rounded-xl bg-primary-container text-on-primary-container relative"
+          >
+            <div class="flex items-center gap-3 mb-6">
+              <div class="bg-white/20 p-2 rounded-full">
+                <span class="material-symbols-outlined text-white"
+                  >description</span
+                >
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-white">
+                Result Details
+              </h3>
+            </div>
+            <div class="space-y-4">
+              <div class="bg-white/10 p-4 rounded-lg border border-white/5">
+                <p class="font-label-md text-white mb-1">Exam</p>
+                <p id="detail-exam" class="text-sm opacity-90"></p>
+              </div>
+              <div class="bg-white/10 p-4 rounded-lg border border-white/5">
+                <p class="font-label-md text-white mb-1">Date Taken</p>
+                <p id="detail-date" class="text-sm opacity-90"></p>
+              </div>
+              <div class="bg-white/10 p-4 rounded-lg border border-white/5">
+                <p class="font-label-md text-white mb-1">Correct / Wrong</p>
+                <p class="text-sm opacity-90">
+                  <span id="detail-correct"></span> correct,
+                  <span id="detail-wrong"></span> wrong
+                </p>
+              </div>
+            </div>
+            <a
+              href="ai-academic.html"
+              class="mt-6 block w-full py-3 text-center bg-tertiary-fixed text-on-tertiary-fixed rounded-lg font-bold font-label-md hover:bg-tertiary-fixed-dim transition-colors"
+            >
+              Launch AI Practice Session
+            </a>
+          </div>
+
+          <!-- All my results -->
+          <div class="md:col-span-12 bento-card rounded-xl overflow-hidden">
+            <div
+              class="px-8 py-5 border-b border-outline-variant bg-surface-container-low"
+            >
+              <h3 class="font-headline-md text-headline-md text-primary">
+                My Exam History
+              </h3>
+              <p class="text-sm text-on-surface-variant">
+                Click any exam to see its result.
+              </p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr class="text-left">
+                    <th class="px-8 py-4 font-label-sm text-on-surface-variant">
+                      Exam Name
+                    </th>
+                    <th class="px-8 py-4 font-label-sm text-on-surface-variant">
+                      Date
+                    </th>
+                    <th class="px-8 py-4 font-label-sm text-on-surface-variant">
+                      Score
+                    </th>
+                    <th class="px-8 py-4 font-label-sm text-on-surface-variant">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  id="history-body"
+                  class="divide-y divide-outline-variant"
+                ></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- BottomNavBar (Mobile) -->
+    <nav
+      class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 pb-safe bg-surface-container-lowest border-t border-outline-variant shadow-lg rounded-t-xl"
+    >
+      <a
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-90 transition-transform"
+        href="student-dashboard.html"
+      >
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-label-sm">Home</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:scale-90 transition-transform"
+        href="exam-setup.html"
+      >
+        <span class="material-symbols-outlined">assignment</span>
+        <span class="font-label-sm">Tests</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-90 transition-transform"
+        href="ai-academic.html"
+      >
+        <span class="material-symbols-outlined">smart_toy</span>
+        <span class="font-label-sm">AI Chat</span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-90 transition-transform"
+        href="index.html"
+      >
+        <span class="material-symbols-outlined">person</span>
+        <span class="font-label-sm">Profile</span>
+      </a>
+    </nav>
+    <!-- FAB for quick action (Conditional on results screen for review) -->
+    <button
+      class="fixed bottom-24 right-6 lg:bottom-12 lg:right-12 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 group"
+    >
+      <span class="material-symbols-outlined">help</span>
+      <span
+        class="absolute right-16 bg-primary text-white px-3 py-1 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity"
+        >Contact Tutor</span
+      >
+    </button>
+
+    <script src="./scripts/supabase.min.js"></script>
+    <script src="./scripts/site.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const $ = (id) => document.getElementById(id);
+        const esc = (v) =>
+          String(v ?? "").replace(
+            /[&<>"']/g,
+            (c) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              })[c],
+          );
+        const pctOf = (r) =>
+          r.total && Number(r.total) > 0
+            ? (Number(r.score) / Number(r.total)) * 100
+            : Number(r.score) || 0;
+
+        function show(which) {
+          [
+            "loading-state",
+            "error-state",
+            "empty-state",
+            "result-content",
+          ].forEach((id) => $(id).classList.toggle("hidden", id !== which));
+          $("header-actions").classList.toggle(
+            "hidden",
+            which !== "result-content",
+          );
+          $("header-actions").classList.toggle(
+            "flex",
+            which === "result-content",
+          );
+        }
+
+        function showError(msg) {
+          $("error-message").textContent = msg;
+          $("result-subtitle").textContent = "";
+          show("error-state");
+        }
+
+        function renderResult(r) {
+          const pct = Math.round(pctOf(r));
+          const passed = pct >= 50;
+          const total = Number(r.total) || 0;
+          const score = Number(r.score) || 0;
+
+          $("result-subtitle").textContent = r.exam_name || "Exam result";
+          $("score-value").textContent = score;
+          $("total-value").textContent = total;
+
+          const badge = $("status-badge");
+          badge.className =
+            "inline-flex items-center px-4 py-2 rounded-full font-bold text-headline-sm mb-4 " +
+            (passed
+              ? "bg-tertiary-fixed text-on-tertiary-fixed"
+              : "bg-error-container text-on-error-container");
+          badge.innerHTML = `<span class="material-symbols-outlined mr-2" style="font-variation-settings: 'FILL' 1">${passed ? "verified" : "cancel"}</span>${passed ? "PASS" : "FAIL"} (${pct}%)`;
+
+          $("result-title").textContent =
+            pct >= 70
+              ? "Excellent Performance!"
+              : passed
+                ? "Good Job, You Passed!"
+                : "Keep Practising!";
+          $("result-message").textContent = passed
+            ? `You scored ${score} out of ${total} in ${r.exam_name || "this exam"}.`
+            : `You scored ${score} out of ${total} in ${r.exam_name || "this exam"}. Try again and use the AI Tutor to improve.`;
+
+          $("detail-exam").textContent = r.exam_name || "Unknown Exam";
+          $("detail-date").textContent = r.created_at
+            ? new Date(r.created_at).toLocaleString()
+            : "-";
+          $("detail-correct").textContent = score;
+          $("detail-wrong").textContent = Math.max(total - score, 0);
+
+          // animate ring
+          const C = 263.89;
+          setTimeout(() => {
+            $("ring-circle").style.strokeDashoffset =
+              C - (Math.min(pct, 100) * C) / 100;
+          }, 300);
+        }
+
+        function renderHistory(results, selectedId) {
+          $("history-body").innerHTML = results
+            .map((r) => {
+              const passed = pctOf(r) >= 50;
+              const label = r.status || (passed ? "PASSED" : "FAILED");
+              const cls = passed
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800";
+              const selected =
+                String(r.id) === String(selectedId)
+                  ? " bg-surface-container-low"
+                  : "";
+              return `<tr class="history-row cursor-pointer hover:bg-surface-container transition-colors${selected}" data-id="${esc(r.id)}">
+                <td class="px-8 py-4 font-body-md">${esc(r.exam_name || "Unknown Exam")}</td>
+                <td class="px-8 py-4 font-body-md">${r.created_at ? new Date(r.created_at).toLocaleDateString() : "-"}</td>
+                <td class="px-8 py-4 font-label-md font-bold">${esc(r.score)}/${esc(r.total || 0)}</td>
+                <td class="px-8 py-4"><span class="${cls} px-3 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">${esc(label)}</span></td>
+              </tr>`;
+            })
+            .join("");
+          document.querySelectorAll(".history-row").forEach((row) =>
+            row.addEventListener("click", () => {
+              window.location.href = `exam-result.html?id=${row.dataset.id}`;
+            }),
+          );
+        }
+
+        $("download-pdf-btn").addEventListener("click", () => window.print());
+
+        async function init(client) {
+          try {
+            const {
+              data: { user },
+              error: authError,
+            } = await client.auth.getUser();
+            if (authError || !user) {
+              window.location.href = "register.html";
+              return;
+            }
+
+            const name =
+              user.user_metadata?.full_name || user.user_metadata?.name;
+            if (name) $("sidebar-name").textContent = name;
+            if (user.email) $("sidebar-email").textContent = user.email;
+
+            // ONLY this student's results
+            const { data, error } = await client
+              .from("results")
+              .select("*")
+              .eq("user_id", user.id)
+              .order("created_at", { ascending: false });
+            if (error) throw error;
+
+            // only exams the student really attempted (ignore old empty 0-score rows)
+            const results = (data || []).filter((r) => Number(r.score) > 0);
+            if (results.length === 0) {
+              $("result-subtitle").textContent =
+                "You have not taken any exam yet.";
+              show("empty-state");
+              return;
+            }
+
+            // ?id=... shows that exam, otherwise the latest one
+            const wantedId = new URLSearchParams(window.location.search).get(
+              "id",
+            );
+            const selected =
+              results.find((r) => String(r.id) === String(wantedId)) ||
+              results[0];
+
+            renderResult(selected);
+            renderHistory(results, selected.id);
+            show("result-content");
+          } catch (err) {
+            console.error("Result page error:", err);
+            showError(err.message || "Please refresh the page and try again.");
+          }
+        }
+
+        const getClient = () =>
+          window.supabaseClient ||
+          (typeof supabaseClient !== "undefined" ? supabaseClient : null);
+        let waited = 0;
+        (function wait() {
+          const client = getClient();
+          if (client) return init(client);
+          waited += 100;
+          if (waited >= 10000)
+            return showError("Could not connect. Please refresh the page.");
+          setTimeout(wait, 100);
+        })();
+      });
+    </script>
+  </body>
+</html>
